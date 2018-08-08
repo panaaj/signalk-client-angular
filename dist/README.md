@@ -37,7 +37,7 @@ npm install signalk-client-angular
 - Inject SignalKClient and subscribe to Signal K Stream API events.
 
 ```
-import { SignalKClient } from 'signalk-client';
+import { SignalKClient } from 'signalk-client-angular';
 
     // **** Inject the SignalKClient ****
 
