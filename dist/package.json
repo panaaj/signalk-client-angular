@@ -1,0 +1,35 @@
+{
+  "name": "signalk-client-angular",
+  "version": "1.0.1",
+  "description": "Signal K client library for Angluar.",
+  "keywords": [
+    "angular",
+    "signal k",
+    "signalk-client"
+  ],
+  "author": "AdrianP",
+  "contributors": [
+    {
+      "name": "Adrian Panazzolo"
+    }
+  ],
+  "repository": "https://github.com/panaaj/signalk-client-angular",
+  "license": "Apache-20",
+  "peerDependencies": {
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+  },
+  "main": "bundles/signalk-client-angular.umd.js",
+  "module": "fesm5/signalk-client-angular.js",
+  "es2015": "fesm2015/signalk-client-angular.js",
+  "esm5": "esm5/signalk-client-angular.js",
+  "esm2015": "esm2015/signalk-client-angular.js",
+  "fesm5": "fesm5/signalk-client-angular.js",
+  "fesm2015": "fesm2015/signalk-client-angular.js",
+  "typings": "signalk-client-angular.d.ts",
+  "metadata": "signalk-client-angular.metadata.json",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  }
+}
