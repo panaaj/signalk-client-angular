@@ -17,10 +17,15 @@ export declare class SignalKClient {
     private wsProtocol;
     private _version;
     private _filter;
+    private _wsTimeout;
+    private _token;
     private server;
     private debug(val);
     constructor(http: HttpClient);
     version: number;
+    authToken: string;
+    login(username: string, password: string): Observable<Object>;
+    connectionTimeout: number;
     private init(hostname?, port?, useSSL?);
     hello(hostname?: string, port?: number, useSSL?: boolean): Observable<Object>;
     connect(hostname?: string, port?: number, useSSL?: boolean, subscribe?: string): void;
@@ -28,6 +33,7 @@ export declare class SignalKClient {
     private connectDeltaByUrl(url);
     disconnect(): void;
     send(data: any): void;
+    sendUpdate(context: string, path: string, value: any): void;
     subscribe(context?: string, path?: string, ...options: any[]): void;
     unsubscribe(context?: string, path?: string): void;
     isDelta(msg: any): boolean;
@@ -41,4 +47,10 @@ export declare class SignalKClient {
     private get(path);
     private resolveHttpEndpoint();
     private contextToPath(context);
+}
+export declare class Alarm {
+    upper: number;
+    lower: number;
+    state: string;
+    message: string;
 }

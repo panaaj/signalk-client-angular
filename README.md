@@ -82,7 +82,64 @@ import { SignalKClient } from 'signalk-client-angular';
 
 ## API
 
-### Connect / Disconnect:
+
+### AUTHENTICATION:
+
+Signal K servers with security enabled will require authentication 
+to use HTTP and STREAM APIs.
+
+You can: 
+
+- Use a token already you have already generated 
+
+- Retrieve a token for a specific user by providing *username / password*
+
+
+
+#### authToken (token)
+
+Used to provide an authentication token to be used when interacting with
+the Signal K server.
+
+The `login()` function can be used to retrieve the token for a particular user account.
+
+```
+    this.sk.authToken= '<auth token>';
+```
+
+Once you have supplied an `authToken` it will be used for all subsequent operations. 
+
+
+#### login (user, password)
+
+Get authentication token for the provided user credentials.
+
+This token can then be applied to the `authToken` attribute so it is  
+used in subsequent operations.
+
+*Returns*: Observable<HttpResponse> containing JWT token.
+
+```
+    this.sk.hello( myserver, 80, false );
+
+    // ** login
+    this.sk.login( 'myuser', 'mypassword').subscribe(
+        r=> { 
+            // **** authenticated ****
+            this.sk.authToken= r['token'];
+            ...
+            this.sk.apiGet( ... );
+            ... 
+        },
+        err=> { // **** not authenticated **** }
+    ); 
+```
+
+
+### CONNECT / DISCONNECT:
+
+Use the following methods to establish connection to a Signal K server.
+
 
 #### connect(hostname, port, useSSL, subscribe)
 
@@ -91,7 +148,7 @@ Connect to Signal K server using the supplied parameters using *discovered* serv
 Contacts the server and uses the server *discovery* response to obtain service endpoints.
 This endpoint information is used to connect to the HTTP and STREAM APIs.
 
-*Note: if the target server does not support http or does not return a discovery response use **connectDelta()** to directly connect to a web socket stream.*
+*Note: if the target server does not support http or does not return a discovery response use `connectDelta()` to directly connect to a web socket stream.*
 
 - *hostname*: host name or ip address
 
@@ -143,10 +200,24 @@ Angular production build:
 
 - Default Signal K server host if no values supplied `http://localhost:443` *(useSSL=true)*
 
+#### connectionTimeout (milliseconds)
+
+Set stream connection timeout value in milliseconds. default=20000 (20 sec).
+
+If a connection has not been established withing the specified time period the connection attempt is aborted and an onError event is raised.
+
+*Valid value range is 3000 to 60000 milliseconds (3 to 60 sec).*
+
+
+```
+    this.sk.connectionTimeout= 10000;
+
+    this.sk.connect( ... );
+```
 
 #### connectDelta(hostname, port, useSSL, subscribe)
 
-Connect direct to Signal K server delta stream using the supplied parameters without performing *endpoint discovey*.
+Connect direct to Signal K server delta stream using the supplied parameters without performing *endpoint discovery*.
 
 Use this method when no HTTP API is available to discover service endpoints.
 
@@ -193,7 +264,8 @@ Disconnects from Signal K server Stream endpoint and closes the connection.
 
 #### hello(hostname, port, useSSL)
 
-Get Signal K server discovery response **without** establishing connection to service endpoints.
+Get Signal K server discovery response **without** establishing a connection to 
+the STREAM API service endpoint.
 
 Contacts the server and requests the server *discovery* response.
 
@@ -247,7 +319,7 @@ the stream to use the specified version.
 The following functions facilitate interaction with the Signal K HTTP API via the 
 established connection. 
 
-Use the **connect(...)** function prior to using any of these API functions!
+Use the `connect(...)` function prior to using any of these API functions!
 
 #### apiGet(path)
 
@@ -376,7 +448,7 @@ Returns the self identity.
 The following functions facilitate interaction with the Signal K STREAM API via the 
 established connection.
 
-Use the **connect(...)** function prior to using any of these API functions!
+Use the `connect(...)` or `connectDelta)` functions prior to using any of these API functions!
 
 
 #### STREAM API Events
@@ -477,6 +549,7 @@ Unubscribe from specific Signal K paths so they are no longer received in the de
     this.sk.unsubscribe();    
 ```
 
+
 #### send(data)
 
 Send data to the Signal K server STREAM API.
@@ -500,6 +573,29 @@ Send data to the Signal K server STREAM API.
             "value": 1.52
         }
     });
+```
+
+
+#### sendDelta(context, path, value)
+
+Send value update via the Signal K server STREAM API.
+
+- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+
+- *path*: path to Signal K resource *(dotted notation)*
+
+- *value*: value to write
+
+*Returns*: Subscribe to SignalKClient events to receive results of actions.
+
+```
+    // ** connect to server **
+    this.sk.connect(...);
+
+    ...
+
+    // **** send update to STREAM API ****
+    this.sk.sendUpdate("vessels.self", "steering.autopilot.target.headingTrue", 1.52);
 ```
 
 
