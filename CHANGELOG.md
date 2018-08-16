@@ -3,7 +3,11 @@
 
 ### v1.2.0
 
-- added Alarm handling `clearAlarm()`, `setAlarm()`.
+- added Alarm functionality `raiseAlarm()`, `clearAlarm()`.
+
+- added ability to see if Signal K server has security enabled via the`authRequired` attribute.
+
+- get list of supported api versions by server via the `apiVersions` attribute.
 
 
 ### v1.1.0
@@ -18,6 +22,7 @@
 ### v1.0.1
 
 - `connectDelta()` function added to allow connection to servers that do not reply with an HTTP discovery response detailing service endpoints.
+
 
 **BREAKING CHANGES:**
 

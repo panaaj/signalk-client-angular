@@ -23,6 +23,8 @@ export declare class SignalKClient {
     private debug(val);
     constructor(http: HttpClient);
     version: number;
+    readonly apiVersions: any[];
+    readonly authRequired: boolean;
     authToken: string;
     login(username: string, password: string): Observable<Object>;
     connectionTimeout: number;
@@ -39,18 +41,31 @@ export declare class SignalKClient {
     isDelta(msg: any): boolean;
     isHello(msg: any): boolean;
     filter: string;
+    raiseAlarm(context: string, alarmPath: string, alarm: Alarm): void;
+    clearAlarm(context: string, alarmPath: string): void;
     getSelf(): Observable<Object>;
     getSelfId(): Observable<Object>;
     getMeta(context: string, path: string): Observable<Object>;
     apiGet(path: string): Observable<Object>;
     apiPut(context: string, path: string, key: any, value: any): Observable<Object>;
-    private get(path);
+    get(path: string): Observable<Object>;
     private resolveHttpEndpoint();
     private contextToPath(context);
 }
+export declare enum AlarmState {
+    normal = "normal",
+    alert = "alert",
+    warn = "warn",
+    alarm = "alarm",
+    emergency = "emergency",
+}
+export declare enum AlarmMethod {
+    visual = "visual",
+    sound = "sound",
+}
 export declare class Alarm {
-    upper: number;
-    lower: number;
-    state: string;
+    state: AlarmState;
+    method: Array<AlarmMethod>;
     message: string;
+    constructor(message?: string);
 }

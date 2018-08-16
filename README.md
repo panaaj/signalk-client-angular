@@ -94,6 +94,8 @@ You can:
 
 - Retrieve a token for a specific user by providing *username / password*
 
+*Note: if a Signal K server has security enabled and you have not provided a valid 
+`authToken` an Error event will be triggered to notify of this situation.* 
 
 
 #### authToken (token)
@@ -287,6 +289,20 @@ Contacts the server and requests the server *discovery* response.
 ```
 
 
+#### apiVersions (array)
+
+Get list of api versions supported by the  Signal K server.
+
+
+```
+    // ** connect to server **
+    this.sk.connect(...);
+
+    // ** get supported api versions **
+    console.log(this.sk.apiVersions);
+```
+
+
 #### version (number)
 
 Get / Set preferred Signal K API version.
@@ -448,7 +464,7 @@ Returns the self identity.
 The following functions facilitate interaction with the Signal K STREAM API via the 
 established connection.
 
-Use the `connect(...)` or `connectDelta)` functions prior to using any of these API functions!
+Use the `connect(...)` or `connectDelta()` functions prior to using any of these API functions!
 
 
 #### STREAM API Events
@@ -638,4 +654,104 @@ Returns true if recieved message is a Signal K server 'hello' message.
     });    
 ```
 
+
+### ALARMS
+
+The following are functions and classes that support interaction with Signal K notification / alarm functionality.
+
+Be sure to `import` these along with `SignalKClient`in your application;
+```
+import {Alarm, AlarmState, AlarmMethod, SignalKClient} from signalk-client-angular;
+```
+
+
+#### raiseAlarm(context, alarmPath, alarm)
+
+Raise an alarm to trigger the server to send a notification message.
+
+
+- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+
+- *alarmPath*: path of alarm in the `notifications` tree. *(e.g. 'mob')*
+
+- *alarm*: `Alarm` object that defines the alarm to raise. 
+
+*See datails regarding `Alarm` and associated classes below.*
+
+```
+import {Alarm, AlarmState, AlarmMethod, SignalKClient} from signalk-client-angular;
+    ...
+    this.sk.connect( ... );
+    ...
+
+    let al= new Alarm('Vessel is sinking!');
+    al.state= AlarmState.warn;
+    al.method= [AlarmMethod.visual];
+    this.sk.raiseAlarm('self', 'sinking', al);
+```
+
+#### clearAlarm(context, alarmPath)
+
+Clear alarm that was raised using `raiseAlarm()` function.
+
+
+- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+
+- *alarmPath*: path of alarm in the `notifications` tree. *(e.g. 'mob', 'sinking')*
+
+```
+    this.sk.clearAlarm('self', 'sinking');
+    ...
+    this.sk.clearAlarm('self', 'navigation.anchor.currentRadius');
+
+```
+
+
+
+#### Alarm (class)
+
+Class to encapsulate Alarm message that is raised when using `raiseAlarm()`.
+
+**Usage**
+```
+let al= new Alarm();
+
+let al= new Alarm('Anchor drag alarm!!!');
+```
+
+**Constructor**
+
+`Alarm(message:string)`
+
+- *message*: (optional) string containing alarm message text.
+
+**Attibutes**
+
+- *message*: String containing alarm message text.
+
+- *state*: Alarm state value *default: `AlarmState.normal`*
+
+- *method*: Array of AlarmMethod values. *default: `[AlarmMethod.visual, AlarmMethod.sound]`*
+
+
+#### AlarmState (enum)
+
+AlarmState defines the valid values for Signal K alarm state parameter.
+
+```
+AlarmState.normal
+AlarmState.alert
+AlarmState.warn
+AlarmState.alarm
+AlarmState.emergency
+```
+
+#### AlarmMethod (enum)
+
+AlarmMethod defines the valid values for Signal K alarm method parameter.
+
+```
+AlarmMethod.visual
+AlarmMethod.sound
+```
 
