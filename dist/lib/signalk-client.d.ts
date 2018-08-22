@@ -51,6 +51,8 @@ export declare class SignalKClient {
     get(path: string): Observable<Object>;
     private resolveHttpEndpoint();
     private contextToPath(context);
+    private dotToSlash(path);
+    private slashToDot(path);
 }
 export declare enum AlarmState {
     normal = "normal",

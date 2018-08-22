@@ -343,7 +343,7 @@ Make a request to the Signal K server HTTP API.
 
 Returns the Signal K resource from the specified path.
 
-- *path*: path to Signal K resource
+- *path*: path to Signal K resource *e.g. environment/outside*
 
 *Returns*: Observable<HttpResponse>
 
@@ -373,7 +373,7 @@ in this case you can use `apiPut()` to submit a value to the server for this pat
 
 - *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
 
-- *path*: path to Signal K resource
+- *path*: path to Signal K resource  *(slash or dotted notation)*
 
 - *key*: name of attribute the value is being written to
 
@@ -388,9 +388,9 @@ in this case you can use `apiPut()` to submit a value to the server for this pat
     ...
     this.sk.apiPut(
         'self',
-        'navigation', 
-        'courseOverGroundTrue', 
-        '0.56'
+        'environment/outside', 
+        'temperature', 
+        '297.4'
     ).subscribe(
         res=> { console.log(res) },
         err=> { console.log(err) }
@@ -404,7 +404,7 @@ Get Meta data for the specified context and path in the Signal K tree.
 
 - *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
 
-- *path*: path to Signal K resource *(dotted notation)*
+- *path*: path to Signal K resource *(slash or dotted notation)*
 
 *Returns*: Observable<HttpResponse>
 
@@ -592,9 +592,9 @@ Send data to the Signal K server STREAM API.
 ```
 
 
-#### sendDelta(context, path, value)
+#### sendUpdate(context, path, value)
 
-Send value update via the Signal K server STREAM API.
+Send delta update via the Signal K server STREAM API.
 
 - *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
 
