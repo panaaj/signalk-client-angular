@@ -1,6 +1,11 @@
 # CHANGELOG: signalk-client-angular
 
 
+### v1.3.0
+
+- added put() and post() to enable these actions to urls outside the */signalk/v1/api/* scope.
+
+
 ### v1.2.0
 
 - added Alarm functionality `raiseAlarm()`, `clearAlarm()`.

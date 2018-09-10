@@ -339,11 +339,11 @@ Use the `connect(...)` function prior to using any of these API functions!
 
 #### apiGet(path)
 
-Make a request to the Signal K server HTTP API.
+Make a request to a path WITHIN the Signal K server HTTP API scope */signalk/v1/api/*.
 
 Returns the Signal K resource from the specified path.
 
-- *path*: path to Signal K resource *e.g. environment/outside*
+- *path*: path relative to HTTP API *i.e. http://server:port/signalk/v1/api/*
 
 *Returns*: Observable<HttpResponse>
 
@@ -360,6 +360,26 @@ Returns the Signal K resource from the specified path.
     );
 ```
 
+#### get(path)
+
+Make a request to a path NOT WITHIN the Signal K server HTTP API scope */signalk/v1/api/*.
+
+- *path*: path relative to Signal K root *i.e. http://server:port/*
+
+*Returns*: Observable<HttpResponse>
+
+```
+    // ** connect to server **
+    this.sk.connect(...);
+
+    ...
+
+    // **** make HTTP GET request ****
+    this.sk.get('/plugins').subscribe(
+        response=> { ... },
+        error=> { ... }
+    );
+```
 
 #### apiPut(context, path, key, value)
 
@@ -397,6 +417,47 @@ in this case you can use `apiPut()` to submit a value to the server for this pat
     );
 ```
 
+#### put(path, value)
+
+Make a PUT request to a path NOT WITHIN the Signal K server HTTP API scope */signalk/v1/api/*.
+
+- *path*: path relative to Signal K root *i.e. http://server:port/*
+
+*Returns*: Observable<HttpResponse>
+
+```
+    // ** connect to server **
+    this.sk.connect(...);
+
+    ...
+
+    // **** make HTTP PUT request ****
+    this.sk.put('/plugins/plugin-name/acton').subscribe(
+        response=> { ... },
+        error=> { ... }
+    );
+```
+
+#### post(path, value)
+
+Make a POST request to a path NOT WITHIN the Signal K server HTTP API scope */signalk/v1/api/*.
+
+- *path*: path relative to Signal K root *i.e. http://server:port/*
+
+*Returns*: Observable<HttpResponse>
+
+```
+    // ** connect to server **
+    this.sk.connect(...);
+
+    ...
+
+    // **** make HTTP POST request ****
+    this.sk.post('/plugins/plugin-name/acton').subscribe(
+        response=> { ... },
+        error=> { ... }
+    );
+```
 
 #### getMeta(context, path)
 
@@ -420,7 +481,6 @@ Get Meta data for the specified context and path in the Signal K tree.
         error=> { ... }
     );
 ```
-
 
 #### getSelf()
 

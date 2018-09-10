@@ -49,6 +49,8 @@ export declare class SignalKClient {
     apiGet(path: string): Observable<Object>;
     apiPut(context: string, path: string, key: any, value: any): Observable<Object>;
     get(path: string): Observable<Object>;
+    put(path: string, value: any): Observable<Object>;
+    post(path: string, value: any): Observable<Object>;
     private resolveHttpEndpoint();
     private contextToPath(context);
     private dotToSlash(path);
