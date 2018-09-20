@@ -1,5 +1,9 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.3.2
+
+- added overloaded apiPut() method `apiPut(context, path, value)`
+
 
 ### v1.3.0
 

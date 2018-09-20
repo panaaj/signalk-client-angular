@@ -381,7 +381,17 @@ Make a request to a path NOT WITHIN the Signal K server HTTP API scope */signalk
     );
 ```
 
-#### apiPut(context, path, key, value)
+#### apiPut()
+
+Overloaded method with the following call signatures:
+
+**apiPut(context, path, value)**
+
+*results in HTTP PUT '<host>/signalk/v1/api/<path>' {value: <value>}*
+
+**apiPut(context, path, key, value)**
+
+*results in HTTP PUT '<host>/signalk/v1/api/<path>' {value: <key>: {<value>} }*
 
 Send a PUT request to the Signal K server HTTP API for a path that has
 a handler assigned.

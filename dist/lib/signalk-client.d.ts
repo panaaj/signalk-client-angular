@@ -27,6 +27,7 @@ export declare class SignalKClient {
     readonly authRequired: boolean;
     authToken: string;
     login(username: string, password: string): Observable<Object>;
+    logout(): Observable<Object>;
     connectionTimeout: number;
     private init(hostname?, port?, useSSL?);
     hello(hostname?: string, port?: number, useSSL?: boolean): Observable<Object>;
@@ -47,7 +48,8 @@ export declare class SignalKClient {
     getSelfId(): Observable<Object>;
     getMeta(context: string, path: string): Observable<Object>;
     apiGet(path: string): Observable<Object>;
-    apiPut(context: string, path: string, key: any, value: any): Observable<Object>;
+    apiPut(context: string, path: string, value: any): any;
+    apiPut(context: string, path: string, key: any, value: any): any;
     get(path: string): Observable<Object>;
     put(path: string, value: any): Observable<Object>;
     post(path: string, value: any): Observable<Object>;
