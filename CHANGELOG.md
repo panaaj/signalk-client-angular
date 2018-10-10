@@ -1,5 +1,17 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.3.5
+
+- bug fixes: corrects issue where secure connection to web socket endpoint was using `ws://` rather than `wss://`
+
+### v1.3.4
+
+- bug fixes
+
+### v1.3.3
+
+- bug fixes
+
 ### v1.3.2
 
 - added overloaded apiPut() method `apiPut(context, path, value)`
