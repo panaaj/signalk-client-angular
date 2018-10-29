@@ -1,5 +1,10 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.4.0
+
+- add support for *History Playback* api via `playback()`, `connectPlayback()` and `snapshot()` methods
+- added `isConnected` property
+
 ### v1.3.5
 
 - bug fixes: corrects issue where secure connection to web socket endpoint was using `ws://` rather than `wss://`

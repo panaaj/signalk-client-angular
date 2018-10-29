@@ -19,20 +19,36 @@ export declare class SignalKClient {
     private _filter;
     private _wsTimeout;
     private _token;
-    private server;
+    private _authType;
+    server: {
+        authRequired: number;
+        endpoints: {};
+        info: {};
+        apiVersions: any[];
+        ws: {
+            self: any;
+            roles: {};
+        };
+    };
     private debug(val);
     constructor(http: HttpClient);
     version: number;
     readonly apiVersions: any[];
-    readonly authRequired: boolean;
+    readonly isConnected: boolean;
+    readonly authRequired: number;
     authToken: string;
     login(username: string, password: string): Observable<Object>;
     logout(): Observable<Object>;
     connectionTimeout: number;
     private init(hostname?, port?, useSSL?);
+    private processHello(response);
+    private getStreamUrl();
     hello(hostname?: string, port?: number, useSSL?: boolean): Observable<Object>;
     connect(hostname?: string, port?: number, useSSL?: boolean, subscribe?: string): void;
     connectDelta(hostname?: string, port?: number, useSSL?: boolean, subscribe?: string): void;
+    playback(hostname: string, port: number, useSSL: boolean, subscribe: any): void;
+    connectPlayback(hostname: string, port: number, useSSL: boolean, subscribe: any): void;
+    private parsePlaybackOptions(opt);
     private connectDeltaByUrl(url);
     disconnect(): void;
     send(data: any): void;
@@ -50,6 +66,7 @@ export declare class SignalKClient {
     apiGet(path: string): Observable<Object>;
     apiPut(context: string, path: string, value: any): any;
     apiPut(context: string, path: string, key: any, value: any): any;
+    snapshot(context: string, time: string): Observable<Object>;
     get(path: string): Observable<Object>;
     put(path: string, value: any): Observable<Object>;
     post(path: string, value: any): Observable<Object>;
