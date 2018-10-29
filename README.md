@@ -143,14 +143,22 @@ used in subsequent operations.
 Use the following methods to establish connection to a Signal K server.
 
 
+#### isConnected: boolean
+
+Returns true if a Web socket stream connection has been established.
+
+
 #### connect(hostname, port, useSSL, subscribe)
 
 Connect to Signal K server using the supplied parameters using *discovered* service endpoints.
 
-Contacts the server and uses the server *discovery* response to obtain service endpoints.
-This endpoint information is used to connect to the HTTP and STREAM APIs.
+This method contacts the server using the supplied details and performs the following:
 
-*Note: if the target server does not support http or does not return a discovery response use `connectDelta()` to directly connect to a web socket stream.*
+1. Issues a `hello()` request to obtain service endpoints.
+2. Persists received endpoint information for future HTTP API requests
+3. Opens a connection using the STREAM API via `connectDelta()`.
+
+*Note: if the target server only supports Stream API (does not support http or does not return a discovery response) use `connectDelta()` to directly connect to a web socket stream.*
 
 - *hostname*: host name or ip address
 
@@ -217,11 +225,137 @@ If a connection has not been established withing the specified time period the c
     this.sk.connect( ... );
 ```
 
+#### playback(hostname, port, useSSL, subscribe)
+
+**History Playback Retrieval**
+
+Creates a WebSocket connection that plays back data from a certain point in time with a specified rate using *discovered* service endpoints.
+
+This method contacts the server using the supplied details and performs the following:
+
+1. Issues a `hello()` request to obtain service endpoints.
+2. Persists received endpoint information for future HTTP API requests
+3. Opens a connection using the STREAM API via `connectPlayback()`.
+
+*Note: if the target server only supports Stream API (does not support http or does not return a discovery response) use `connectPlayback()` to directly connect to a web socket stream.*
+
+- *hostname*: host name or ip address
+
+- *port*:     port number
+
+- *useSSL*:   true: uses secure socket protocols *(https / wss)*
+
+- *subscribe*: Signal K playback subcription parameters can be either: 
+    1. query string:  *e.g. `self&startTime=2018-08-24T15:19:09Z&playbackRate=5`*
+
+        See [Signal K Docs](https://github.com/SignalK/specification/blob/master/gitbook-docs/streaming_api.md) for details.
+
+    2. object: 
+    ```
+        {   
+            context: 'self', 
+            startTime: 'startTime=2018-08-24T15:19:09Z', 
+            playbackRate: 1
+        }
+    ```
+
+
+*Returns*: void.  Subscribe to SignalKClient events to receive results of actions.
+
+```
+        // **** Subscribe to Signal K Stream events ***
+
+        this.sk.onConnect.subscribe( e=> {
+            ...
+        });
+        this.sk.onError.subscribe( e=> {
+            ...
+        });
+        this.sk.onClose.subscribe( e=> {
+            ..
+        });
+        this.sk.onMessage.subscribe( e=> {
+            ...
+        });    
+
+        // **** CONNECT to Signal K Playback Stream ****
+        this.sk.connectPlayback( 
+            'myServer', 
+            80, 
+            false, 
+            'self&startTime=2018-08-24T15:19:09Z&playbackRate=5'
+        );
+```
+
+
+#### connectPlayback(hostname, port, useSSL, subscribe)
+
+**History Playback Retrieval**
+
+Creates a WebSocket connection that plays back data from a certain point in time with a specified rate.
+
+Connects directly to Signal K server delta stream using the supplied parameters without performing *endpoint discovery*.
+
+This method is for use when there is no HTTP API available.
+
+*Note: `playback()` is the preferred connection method if HTTP API endpoints are to be used during playback.*
+
+- *hostname*: host name or ip address
+
+- *port*:     port number
+
+- *useSSL*:   true: uses secure socket protocols *(https / wss)*
+
+- *subscribe*: Signal K playback subcription parameters can be either: 
+    1. query string:  *e.g. `self&startTime=2018-08-24T15:19:09Z&playbackRate=5`*
+
+        See [Signal K Docs](https://github.com/SignalK/specification/blob/master/gitbook-docs/streaming_api.md) for details.
+
+    2. object: 
+    ```
+        {   
+            context: 'self', 
+            startTime: 'startTime=2018-08-24T15:19:09Z', 
+            playbackRate: 1
+        }
+    ```
+
+
+*Returns*: void.  Subscribe to SignalKClient events to receive results of actions.
+
+```
+        // **** Subscribe to Signal K Stream events ***
+
+        this.sk.onConnect.subscribe( e=> {
+            ...
+        });
+        this.sk.onError.subscribe( e=> {
+            ...
+        });
+        this.sk.onClose.subscribe( e=> {
+            ..
+        });
+        this.sk.onMessage.subscribe( e=> {
+            ...
+        });    
+
+        // **** CONNECT to Signal K Playback Stream ****
+        this.sk.connectPlayback( 
+            'myServer', 
+            80, 
+            false, 
+            'self&startTime=2018-08-24T15:19:09Z&playbackRate=5'
+        );
+```
+
+
 #### connectDelta(hostname, port, useSSL, subscribe)
 
 Connect direct to Signal K server delta stream using the supplied parameters without performing *endpoint discovery*.
 
-Use this method when no HTTP API is available to discover service endpoints.
+This method is for use when there is no HTTP API available.
+
+*Note: `connect()` is the preferred connection method when HTTP API endpoints are to be used.*
 
 - *hostname*: host name or ip address
 
@@ -360,6 +494,7 @@ Returns the Signal K resource from the specified path.
     );
 ```
 
+
 #### get(path)
 
 Make a request to a path NOT WITHIN the Signal K server HTTP API scope */signalk/v1/api/*.
@@ -380,6 +515,33 @@ Make a request to a path NOT WITHIN the Signal K server HTTP API scope */signalk
         error=> { ... }
     );
 ```
+
+#### snapshot(context:string, time:string)
+
+**History Snapshot Retrieval**
+
+Request from the Signal K server the part of the full model at the requested time.
+
+- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+
+- *time*: date/time in ISO format *eg: 2018-08-24T15:19:09Z*
+
+*Returns*: Observable<HttpResponse>
+
+```
+    // ** connect to server **
+    this.sk.connect(...);
+
+    ...
+    this.sk.snapshot(
+        'self',
+        new Date().toISOString()
+    ).subscribe(
+        res=> { console.log(res) },
+        err=> { console.log(err) }
+    );
+```
+
 
 #### apiPut()
 
