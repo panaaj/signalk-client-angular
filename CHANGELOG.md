@@ -1,5 +1,9 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.4.1
+
+- updated to align with updated security specification.
+
 ### v1.4.0
 
 - add support for *History Playback* api via `playback()`, `connectPlayback()` and `snapshot()` methods
