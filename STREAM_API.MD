@@ -6,11 +6,11 @@ The `stream` object provides methods to facilitate interaction with the Signal K
 
 **Note: You must use any of the `connect` or `open` methods prior to calling any of these API functions!**
 
-[SignalKClient](README.MD): Class for interacting with Signal K server
+[SignalKClient](README.md): Class for interacting with Signal K server
 
-[api](HTTP_API.MD): class for interacting with Signal K HTTP API
+[api](HTTP_API.md): class for interacting with Signal K HTTP API
 
-[worker](WORKER.MD): class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
+[worker](WORKER.md): class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
 
 *Follow the links for the relevant documentation.*
 

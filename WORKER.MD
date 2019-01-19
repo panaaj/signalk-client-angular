@@ -1,10 +1,10 @@
 # WORKER:
 
-[SignalKClient](README.MD): Class for interacting with Signal K server
+[SignalKClient](README.md): Class for interacting with Signal K server
 
-[api](HTTP_API.MD): class for interacting with Signal K HTTP API
+[api](HTTP_API.md): class for interacting with Signal K HTTP API
 
-[stream](STREAM_API.MD): class for interacting with Signal K STREAM API
+[stream](STREAM_API.md): class for interacting with Signal K STREAM API
 
 *Follow the links for the relevant documentation.*
 

@@ -8,11 +8,11 @@ It provides methods to access both the Signal K HTTP and STREAM APIs as well as 
 
 Version 1.5.0 introduces the following classes to interact with Signal K API's:
 
-[api](HTTP_API.MD): class for interacting with Signal K HTTP API
+[api](HTTP_API.md): class for interacting with Signal K HTTP API
 
-[stream](STREAM_API.MD): class for interacting with Signal K STREAM API
+[stream](STREAM_API.md): class for interacting with Signal K STREAM API
 
-[worker](WORKER.MD): class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
+[worker](WORKER.md): class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
 
 See [SignalKClient API](#signalkclient-api) below for details.
 
@@ -222,11 +222,11 @@ this.sk.worker.terminate(..);
 
 SignalKClient contains the following classes to interact with Signal K API's:
 
-[api](HTTP_API.MD): class for interacting with Signal K HTTP API
+[api](HTTP_API.md): class for interacting with Signal K HTTP API
 
-[stream](STREAM_API.MD): class for interacting with Signal K STREAM API
+[stream](STREAM_API.md): class for interacting with Signal K STREAM API
 
-[worker](WORKER.MD): class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
+[worker](WORKER.md): class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
 
 *Follow the links for the relevant documentation.*
 
