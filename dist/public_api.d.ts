@@ -1,1 +1,1 @@
-export * from './lib/signalk-client';
+export * from './lib/signalk-client.module';

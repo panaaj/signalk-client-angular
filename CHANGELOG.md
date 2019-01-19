@@ -1,5 +1,18 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.5.0
+
+This version represents a significant refactoring of SignalKClient to better align it with recent enhancements to the Signal K specification. It contains **MANY BREAKING CHANGES** so please review the [README](README_MD) before upgrading!
+
+It introduces the new classes to interact with Signal K API's:
+
+[api](HTTP_API.MD): class for interacting with Signal K HTTP API endpoint path
+
+[stream](STREAM_API.MD): class for interacting with Signal K STREAM API endpoint path
+
+It also provides a [worker](WORKER.MD)  class as a wrapper for WebWorker scripts to enable moving Signal K data processing off the main thread.
+
+
 ### v1.4.1
 
 - updated to align with updated security specification.

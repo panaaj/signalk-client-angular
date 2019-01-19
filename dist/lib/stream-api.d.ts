@@ -1,0 +1,32 @@
+import { Observable } from 'rxjs';
+export declare class SignalKStream {
+    private _connect;
+    private _close;
+    private _error;
+    private _message;
+    private ws;
+    private _filter;
+    private _wsTimeout;
+    private _token;
+    onConnect: Observable<any>;
+    onClose: Observable<any>;
+    onError: Observable<any>;
+    onMessage: Observable<any>;
+    endpoint: string;
+    selfId: string;
+    token: string;
+    connectionTimeout: number;
+    readonly isOpen: boolean;
+    filter: string;
+    constructor();
+    close(): void;
+    open(url: string, subscribe?: string, token?: string): void;
+    send(data: any): void;
+    sendUpdate(context: string, path: any): any;
+    subscribe(context: string, path: any): any;
+    unsubscribe(context?: string, path?: any): void;
+    isSelf(msg: any): boolean;
+    isDelta(msg: any): boolean;
+    isHello(msg: any): boolean;
+    isResponse(msg: any): boolean;
+}

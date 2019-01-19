@@ -1,94 +1,45 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { SignalKHttp } from './http-api';
+import { SignalKStream } from './stream-api';
+import { Message } from './utils';
+import { SignalKStreamWorker } from './stream-worker';
 export declare class SignalKClient {
     private http;
-    private _connect;
-    onConnect: any;
-    private _close;
-    onClose: any;
-    private _error;
-    onError: any;
-    private _message;
-    onMessage: any;
-    private ws;
+    api: SignalKHttp;
+    stream: SignalKStream;
+    worker: SignalKStreamWorker;
     private hostname;
     private port;
     private protocol;
-    private wsProtocol;
     private _version;
-    private _filter;
-    private _wsTimeout;
     private _token;
-    private _authType;
+    private debug;
     server: {
-        authRequired: number;
         endpoints: {};
         info: {};
         apiVersions: any[];
-        ws: {
-            self: any;
-            roles: {};
-        };
     };
-    private debug(val);
-    constructor(http: HttpClient);
     version: number;
-    readonly apiVersions: any[];
-    readonly isConnected: boolean;
-    readonly authRequired: number;
     authToken: string;
-    login(username: string, password: string): Observable<Object>;
-    logout(): Observable<Object>;
-    connectionTimeout: number;
-    private init(hostname?, port?, useSSL?);
-    private processHello(response);
-    private getStreamUrl();
-    hello(hostname?: string, port?: number, useSSL?: boolean): Observable<Object>;
-    connect(hostname?: string, port?: number, useSSL?: boolean, subscribe?: string): void;
-    connectDelta(hostname?: string, port?: number, useSSL?: boolean, subscribe?: string): void;
-    playback(hostname: string, port: number, useSSL: boolean, subscribe: any): void;
-    connectPlayback(hostname: string, port: number, useSSL: boolean, subscribe: any): void;
-    private parsePlaybackOptions(opt);
-    private connectDeltaByUrl(url);
+    readonly message: typeof Message;
+    constructor(http: HttpClient, api: SignalKHttp, stream: SignalKStream, worker: SignalKStreamWorker);
+    ngOnDestroy(): void;
+    private init;
+    hello(hostname?: string, port?: number, useSSL?: boolean): import("rxjs/internal/Observable").Observable<Object>;
+    connect(hostname?: string, port?: number, useSSL?: boolean): Promise<any>;
     disconnect(): void;
-    send(data: any): void;
-    sendUpdate(context: string, path: string, value: any): void;
-    subscribe(context?: string, path?: string, ...options: any[]): void;
-    unsubscribe(context?: string, path?: string): void;
-    isDelta(msg: any): boolean;
-    isHello(msg: any): boolean;
-    filter: string;
-    raiseAlarm(context: string, alarmPath: string, alarm: Alarm): void;
-    clearAlarm(context: string, alarmPath: string): void;
-    getSelf(): Observable<Object>;
-    getSelfId(): Observable<Object>;
-    getMeta(context: string, path: string): Observable<Object>;
-    apiGet(path: string): Observable<Object>;
-    apiPut(context: string, path: string, value: any): any;
-    apiPut(context: string, path: string, key: any, value: any): any;
-    snapshot(context: string, time: string): Observable<Object>;
-    get(path: string): Observable<Object>;
-    put(path: string, value: any): Observable<Object>;
-    post(path: string, value: any): Observable<Object>;
-    private resolveHttpEndpoint();
-    private contextToPath(context);
-    private dotToSlash(path);
-    private slashToDot(path);
-}
-export declare enum AlarmState {
-    normal = "normal",
-    alert = "alert",
-    warn = "warn",
-    alarm = "alarm",
-    emergency = "emergency",
-}
-export declare enum AlarmMethod {
-    visual = "visual",
-    sound = "sound",
-}
-export declare class Alarm {
-    state: AlarmState;
-    method: Array<AlarmMethod>;
-    message: string;
-    constructor(message?: string);
+    connectStream(hostname?: string, port?: number, useSSL?: boolean, subscribe?: string): Promise<{}>;
+    connectPlayback(hostname: string, port: number, useSSL: boolean, options: any): Promise<{}>;
+    openStream(url?: string, subscribe?: string, token?: string): true | Error;
+    openPlayback(url?: string, options?: any, token?: string): true | Error;
+    private processHello;
+    resolveStreamEndpoint(): string;
+    private resolveHttpEndpoint;
+    private disconnectedFromServer;
+    get(path: string): import("rxjs/internal/Observable").Observable<Object>;
+    put(path: string, value: any): import("rxjs/internal/Observable").Observable<Object>;
+    post(path: string, value: any): import("rxjs/internal/Observable").Observable<Object>;
+    login(username: string, password: string): import("rxjs/internal/Observable").Observable<Object>;
+    logout(): import("rxjs/internal/Observable").Observable<Object>;
+    snapshot(context: string, time: string): import("rxjs/internal/Observable").Observable<Object>;
 }

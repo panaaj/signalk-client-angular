@@ -1,6 +1,6 @@
 {
   "name": "signalk-client-angular",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Signal K client library for Angular.",
   "keywords": [
     "angular",
