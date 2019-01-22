@@ -8,6 +8,7 @@ export declare class SignalKStream {
     private _filter;
     private _wsTimeout;
     private _token;
+    private _playbackMode;
     onConnect: Observable<any>;
     onClose: Observable<any>;
     onError: Observable<any>;
@@ -18,12 +19,15 @@ export declare class SignalKStream {
     connectionTimeout: number;
     readonly isOpen: boolean;
     filter: string;
+    readonly playbackMode: boolean;
     constructor();
     close(): void;
     open(url: string, subscribe?: string, token?: string): void;
     send(data: any): void;
-    sendUpdate(context: string, path: any): any;
-    subscribe(context: string, path: any): any;
+    sendUpdate(context: string, path: Array<any>): any;
+    sendUpdate(context: string, path: string, value: any): any;
+    subscribe(context: string, path: Array<any>): any;
+    subscribe(context: string, path: string, options: any): any;
     unsubscribe(context?: string, path?: any): void;
     isSelf(msg: any): boolean;
     isDelta(msg: any): boolean;

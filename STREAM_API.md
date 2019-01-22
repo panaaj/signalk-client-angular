@@ -21,6 +21,7 @@ The `stream` object provides methods to facilitate interaction with the Signal K
 - `connectionTimeout`
 - `filter`
 - `selfId`
+- `playbackMode`
 
 [Methods](#methods)
 - `open()`
@@ -50,6 +51,13 @@ The `stream` object provides methods to facilitate interaction with the Signal K
 Returns true if WebSocket connection is established.
 
 ---
+
+`playbackMode`
+
+Returns true if stream is a history playback data stream.
+
+---
+
 `connectionTimeout`
 
 Set stream connection timeout value in milliseconds. default=20000 (20 sec).
