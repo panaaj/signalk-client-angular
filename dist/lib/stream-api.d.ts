@@ -27,7 +27,7 @@ export declare class SignalKStream {
     sendUpdate(context: string, path: Array<any>): any;
     sendUpdate(context: string, path: string, value: any): any;
     subscribe(context: string, path: Array<any>): any;
-    subscribe(context: string, path: string, options: any): any;
+    subscribe(context: string, path: string, options?: any): any;
     unsubscribe(context?: string, path?: any): void;
     isSelf(msg: any): boolean;
     isDelta(msg: any): boolean;
