@@ -234,6 +234,7 @@ SignalKClient contains the following classes to interact with Signal K API's:
 - `server`
 - `version`
 - `authToken`
+- `uuid`
 
 [Methods](#methods)
 - `hello()`
