@@ -304,6 +304,32 @@ Once you have supplied an `authToken` it will be used for all subsequent operati
 
 ---
 
+`uuid`:
+
+Provides a convenient way to generate a v4 UUID object which has two methods:
+
+- `toString()`: Returns a v4 UUID string
+
+- `toSignalK()`: Returns a formatted Signal K resource identifier
+
+*Example:*
+```
+let uuid= this.sk.uuid;
+
+uuid.toString();  
+
+// returns 27b88354-9fe0-4952-9ce6-c9d4eaea6d9e
+
+uuid.toSignalK();
+
+// returns urn:mrn:signalk:uuid:27b88354-9fe0-4952-9ce6-c9d4eaea6d9e
+
+```
+
+_Note: A new UUID is generated everytime `uuid` is used!_ 
+
+---
+
 ### Methods:
 
 

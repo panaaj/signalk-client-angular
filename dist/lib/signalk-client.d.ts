@@ -3,6 +3,7 @@ import { SignalKHttp } from './http-api';
 import { SignalKStream } from './stream-api';
 import { Message } from './utils';
 import { SignalKStreamWorker } from './stream-worker';
+import { UUID } from './uuid';
 export declare class SignalKClient {
     private http;
     api: SignalKHttp;
@@ -22,6 +23,7 @@ export declare class SignalKClient {
     version: number;
     authToken: string;
     readonly message: typeof Message;
+    readonly uuid: UUID;
     constructor(http: HttpClient, api: SignalKHttp, stream: SignalKStream, worker: SignalKStreamWorker);
     ngOnDestroy(): void;
     private init;
