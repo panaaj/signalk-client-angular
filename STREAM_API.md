@@ -34,12 +34,18 @@ The `stream` object provides methods to facilitate interaction with the Signal K
 - `isDelta()`
 - `isResponse()`
 - `isSelf()`
+- `raiseAlarm()`
+- `clearAlarm()`
 
 [Events](#events)
 - `onConnect()`
 - `onClose()`
-- `onMessage()`
 - `onError()`
+- `onMessage()`
+
+[Alarms](#alarms)
+- `Alarm`
+- `AlarmState`
 
 ---
 
@@ -313,6 +319,52 @@ this.sk.stream.unsubscribe();
 ```
 ---
 
+`raiseAlarm(context, name, alarm)`
+
+Send stream update to raise an alarm of the supplied name.
+
+*Parameters:*
+
+- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+
+- *name*: String containing a name for the alarm or an AlarmType _(see AlarmType below)_. 
+
+- *alarm*: An `Alarm` object _(see Alarm below)_
+
+*Examples:*
+```
+this.sk.stream.raiseAlarm('self','Anchor', new Alarm(
+    'Man overboard!',
+    AlarmState.alarm,
+    true, true ).value
+);   
+
+// ** using special alarm type **
+
+this.sk.stream.raiseAlarm('self',AlarmType.sinking, new Alarm(
+    'SINKING',
+    AlarmState.alarm,
+    true, true ).value
+);   
+```
+---
+
+`clearAlarm(context, name)`
+
+Send stream update to clear the alarm of the supplied name.
+
+*Parameters:*
+
+- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+
+- *name*: Alarm name e.g.MOB, Anchor. 
+
+*Examples:*
+```
+this.sk.stream.clearAlarm('self','MOB');   
+```
+---
+
 `isDelta(msg)`
 
 Returns true if supplied message is a delta message containing updates.
@@ -408,3 +460,64 @@ Returns true if supplied message context is for the `self` identity.
     });    
 ```
 ---
+
+### Alarms
+
+`Alarm`
+
+Alarm object that encapsulates an alarm message for use with `raiseAlarm()` method.
+
+`new Alarm(<message>, <state>, <visual>, <sound>)`
+
+*Parameters:*
+
+- *message*: Alarm message text
+- *state*: An AlarmState value.
+- *visual*: true / false
+- *sound*: true / false
+
+`value`
+
+Attribute that returns a formatted value for use with `raiseAlarm()` method.
+
+*Example:*
+
+```
+    let al= new Alarm(
+        'Anchor drag alarm!;,
+        AlarmState.alarm,
+        true, true
+    ) 
+
+    this.sk.stream.raiseAlarm('self', 'Anchor', al.value);
+```
+
+---
+
+`AlarmState`
+
+Set of valid Signal K alarm state values.
+
+- `normal`
+- `alert`
+- `warn`
+- `alarm`
+- `emergency`
+
+---
+
+`AlarmType`
+
+Special alarm types:
+- `mob`
+- `fire`
+- `sinking`
+- `flooding`
+- `collision`
+- `grounding`
+- `listing`
+- `adrift`
+- `piracy`
+- `abandon`
+
+---    
