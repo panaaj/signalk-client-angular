@@ -49,6 +49,7 @@ The `stream` object provides methods to facilitate interaction with the Signal K
 [Alarms](#alarms)
 - `Alarm`
 - `AlarmState`
+- `AlarmType`
 
 ---
 
