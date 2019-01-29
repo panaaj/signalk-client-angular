@@ -18,7 +18,7 @@ See below for some [Examples](#usage) below to see how to use the updated librar
 
 ---
 
-Please see the detailed [**Documentation**](https://github.com/panaaj/signalk-client-angular/blob/README.md) on GitHub for how to use the updated library.
+Please see the detailed [**Documentation**](https://github.com/panaaj/signalk-client-angular/tree/master/dist) on GitHub for how to use the updated library.
 
 ---
 

@@ -18,7 +18,7 @@ export declare class SignalKStream {
     selfId: string;
     _source: any;
     source: string;
-    token: string;
+    authToken: string;
     connectionTimeout: number;
     readonly isOpen: boolean;
     filter: string;
@@ -26,7 +26,8 @@ export declare class SignalKStream {
     constructor();
     close(): void;
     open(url: string, subscribe?: string, token?: string): void;
-    parseOnMessage(e: any): void;
+    private parseOnMessage;
+    put(context: string, path: string, value: any): string;
     send(data: any): void;
     sendUpdate(context: string, path: Array<any>): any;
     sendUpdate(context: string, path: string, value: any): any;

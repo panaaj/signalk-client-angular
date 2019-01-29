@@ -23,10 +23,12 @@ The `stream` object provides methods to facilitate interaction with the Signal K
 - `selfId`
 - `playbackMode`
 - `source`
+- `authToken`
 
 [Methods](#methods)
 - `open()`
 - `close()`
+- `put()`
 - `send()`
 - `sendUpdate()`
 - `subscribe()`
@@ -134,6 +136,20 @@ this.sk.stream.sendUpdate(....);
     ]
 }
 ```
+---
+
+`authToken`:
+
+A token string to be used for authentication when interacting with the Signal K server.
+
+Use the `login()` method to authenticate to the server and retrieve a token for the specified user.
+
+*Example:*
+```
+this.sk.stream.authToken= '<auth_token_string>';
+```
+
+Once you have supplied an `authToken` it will be used for all subsequent operations. 
 
 ---
 
@@ -215,6 +231,34 @@ this.sk.stream.open( 'stream_url', 'self');
 Closes Signal K Delta stream.
 
 ---
+
+`put(context, path, value)`
+
+Put value to Signal K path via the Signal K server STREAM API.
+
+*Parameters:*
+
+- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+
+- *path*: path to Signal K resource *(dotted notation)*. Can also be an array of valid Signal K subscription objects.
+
+- *value*: value to write
+
+*Returns*: The `requestId` of the put request. Use this `requestId` to determine the status of the request from returned stream message(s).
+
+*Example:*
+
+```
+// ** connect to server **
+this.sk.connect(...);
+
+...
+// **** send update to STREAM API ****
+let id= this.sk.stream.put("vessels.self", "steering.autopilot.target.headingTrue", 1.52);
+
+```
+---
+
 
 `send(data)`
 

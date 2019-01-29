@@ -3,7 +3,7 @@ export declare class SignalKHttp {
     private http;
     private _token;
     endpoint: string;
-    token: string;
+    authToken: string;
     constructor(http: HttpClient);
     getSelf(): import("rxjs/internal/Observable").Observable<Object>;
     getSelfId(): import("rxjs/internal/Observable").Observable<Object>;
