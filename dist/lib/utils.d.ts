@@ -16,6 +16,40 @@ export declare class Message {
         unsubscribe: any[];
     };
     static request(): {
-        requestId: any;
+        requestId: string;
     };
+}
+export declare class Alarm {
+    private _state;
+    private _method;
+    private _message;
+    constructor(message: string, state?: AlarmState, visual?: boolean, sound?: boolean);
+    readonly value: {
+        message: string;
+        state: AlarmState;
+        method: AlarmMethod[];
+    };
+}
+export declare enum AlarmState {
+    normal = "normal",
+    alert = "alert",
+    warn = "warn",
+    alarm = "alarm",
+    emergency = "emergency"
+}
+export declare enum AlarmMethod {
+    visual = "visual",
+    sound = "sound"
+}
+export declare enum AlarmType {
+    mob = "notifications.mob",
+    fire = "notifications.fire",
+    sinking = "notifications.sinking",
+    flodding = "notifications.flooding",
+    collision = "notifications.collision",
+    grounding = "notifications.grounding",
+    listing = "notifications.listing",
+    adrift = "notifications.adrift",
+    piracy = "notifications.piracy",
+    abandon = "notifications.abandon"
 }

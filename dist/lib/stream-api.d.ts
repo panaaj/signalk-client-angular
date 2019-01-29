@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { Alarm, AlarmType } from './utils';
 export declare class SignalKStream {
     private _connect;
     private _close;
@@ -15,6 +16,8 @@ export declare class SignalKStream {
     onMessage: Observable<any>;
     endpoint: string;
     selfId: string;
+    _source: any;
+    source: string;
     token: string;
     connectionTimeout: number;
     readonly isOpen: boolean;
@@ -23,12 +26,16 @@ export declare class SignalKStream {
     constructor();
     close(): void;
     open(url: string, subscribe?: string, token?: string): void;
+    parseOnMessage(e: any): void;
     send(data: any): void;
     sendUpdate(context: string, path: Array<any>): any;
     sendUpdate(context: string, path: string, value: any): any;
     subscribe(context: string, path: Array<any>): any;
     subscribe(context: string, path: string, options?: any): any;
     unsubscribe(context?: string, path?: any): void;
+    raiseAlarm(context: string, name: string, alarm: Alarm): any;
+    raiseAlarm(context: string, type: AlarmType, alarm: Alarm): any;
+    clearAlarm(context: string, name: string): void;
     isSelf(msg: any): boolean;
     isDelta(msg: any): boolean;
     isHello(msg: any): boolean;

@@ -22,6 +22,7 @@ The `stream` object provides methods to facilitate interaction with the Signal K
 - `filter`
 - `selfId`
 - `playbackMode`
+- `source`
 
 [Methods](#methods)
 - `open()`
@@ -111,6 +112,30 @@ Value of the Self identity returned in the WebSocket `hello` message.
 
 ---
 
+`source`
+
+Source label value to be used in messages sent to the Signal K server.
+
+_Example:_
+```
+this.sk.stream.source= 'my-app-name';
+
+this.sk.stream.sendUpdate(....);
+
+// ** resultant message payload **
+{
+    context: 'vessels.self',
+    updates: [
+        {
+            source: {label: 'my-app-name'},
+            timestamp: .....,
+            values: [... ]
+        }
+    ]
+}
+```
+
+---
 
 ### Events
 
@@ -334,9 +359,9 @@ Send stream update to raise an alarm of the supplied name.
 *Examples:*
 ```
 this.sk.stream.raiseAlarm('self','Anchor', new Alarm(
-    'Man overboard!',
+    'Anchor dragging!',
     AlarmState.alarm,
-    true, true ).value
+    true, true )
 );   
 
 // ** using special alarm type **
@@ -344,7 +369,7 @@ this.sk.stream.raiseAlarm('self','Anchor', new Alarm(
 this.sk.stream.raiseAlarm('self',AlarmType.sinking, new Alarm(
     'SINKING',
     AlarmState.alarm,
-    true, true ).value
+    true, true )
 );   
 ```
 ---
@@ -489,7 +514,7 @@ Attribute that returns a formatted value for use with `raiseAlarm()` method.
         true, true
     ) 
 
-    this.sk.stream.raiseAlarm('self', 'Anchor', al.value);
+    this.sk.stream.raiseAlarm('self', 'Anchor', al);
 ```
 
 ---
