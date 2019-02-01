@@ -45,7 +45,7 @@ export declare enum AlarmType {
     mob = "notifications.mob",
     fire = "notifications.fire",
     sinking = "notifications.sinking",
-    flodding = "notifications.flooding",
+    flooding = "notifications.flooding",
     collision = "notifications.collision",
     grounding = "notifications.grounding",
     listing = "notifications.listing",
