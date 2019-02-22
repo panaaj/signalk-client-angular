@@ -1,5 +1,16 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.5.1
+
+- Added `stream.sendRequest()` method.
+
+- Added `stream.login()` method.
+
+- Added `api.post()` method.
+
+- Added `api.delete()` method.
+
+
 ### v1.5.0
 
 This version represents a significant refactoring of SignalKClient to better align it with recent enhancements to the Signal K specification. It contains **MANY BREAKING CHANGES** so please review the [README](README_MD) before upgrading!

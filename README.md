@@ -700,7 +700,7 @@ Request from the Signal K server the part of the full model at the requested tim
 
 *Parameters:*
 
-- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+- *context*: Signal K context *e.g. 'vessels._<uuid_>', 'self'*
 
 - *time*: date/time in ISO format *eg: 2018-08-24T15:19:09Z*
 

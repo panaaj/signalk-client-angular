@@ -28,9 +28,11 @@ The `stream` object provides methods to facilitate interaction with the Signal K
 [Methods](#methods)
 - `open()`
 - `close()`
+- `login()`
 - `put()`
-- `send()`
+- `sendRequest()`
 - `sendUpdate()`
+- `send()`
 - `subscribe()`
 - `unsubscribe()`
 - `isHello()`
@@ -233,13 +235,38 @@ Closes Signal K Delta stream.
 
 ---
 
+`login(username,password)`
+
+Authenticate user to Signal K server vai STREAM API.
+
+_Note: The `stream` object will process the login response message and retain the returned token for use in future requests._
+
+*Parameters:*
+
+- *username*: User name to authenticate
+
+- *password*: User password.
+
+*Returns*: The `requestId` of the put request. Use this `requestId` to determine the status of the request from returned stream message(s).
+
+*Example:*
+
+```
+// ** connect to server **
+this.sk.streamOpen(...);
+
+let id= this.sk.stream.login("myuser", "myUserPassword");
+
+```
+---
+
 `put(context, path, value)`
 
 Put value to Signal K path via the Signal K server STREAM API.
 
 *Parameters:*
 
-- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+- *context*: Signal K context *e.g. 'vessels._<uuid_>', 'self'*
 
 - *path*: path to Signal K resource *(dotted notation)*. Can also be an array of valid Signal K subscription objects.
 
@@ -260,6 +287,70 @@ let id= this.sk.stream.put("vessels.self", "steering.autopilot.target.headingTru
 ```
 ---
 
+`sendRequest(value)`
+
+Send Request message via the Signal K server STREAM API.
+
+A `requestId` is automatically generated and added to the message by the method.
+
+This method will also detect and include an authentication token from prevous `login()` method calls.
+
+*Parameters:*
+
+- *value*: Object containing the message payload.
+
+- *path*: path to Signal K resource *(dotted notation)*. Can also be an array of valid Signal K subscription objects.
+
+- *value*: value to write
+
+*Returns*: The `requestId` of the put request. Use this `requestId` to determine the status of the request from returned stream message(s).
+
+*Example:*
+
+```
+// ** connect to server **
+this.sk.streamOpen(...);
+
+...
+// **** send request to STREAM API ****
+this.sk.stream.sendRequest( {
+    key1: 'Key1 data.',
+    key2: 'Key2 data.'
+});
+
+```
+---
+
+`sendUpdate(context, path, value)`
+
+Send delta update via the Signal K server STREAM API.
+
+*Parameters:*
+
+- *context*: Signal K context *e.g. 'vessels._<uuid_>', 'self'*
+
+- *path*: path to Signal K resource *(dotted notation)*. Can also be an array of valid Signal K subscription objects.
+
+- *value*: value to write
+
+*Returns*: Subscribe to `SignalKClient.stream` events to receive results of actions.
+
+*Example:*
+
+```
+// ** connect to server **
+this.sk.connect(...);
+
+...
+// **** send update to STREAM API ****
+this.sk.stream.sendUpdate("vessels.self", "steering.autopilot.target.headingTrue", 1.52);
+
+this.sk.stream.sendUpdate("vessels.self", [
+    {path: "steering.autopilot.target.headingTrue", value: 1.52},
+    {path: "navigation.speedOverGround.", value: 12.52}
+]);
+```
+---
 
 `send(data)`
 
@@ -291,37 +382,6 @@ this.sk.stream.send({
 ```
 ---
 
-`sendUpdate(context, path, value)`
-
-Send delta update via the Signal K server STREAM API.
-
-*Parameters:*
-
-- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
-
-- *path*: path to Signal K resource *(dotted notation)*. Can also be an array of valid Signal K subscription objects.
-
-- *value*: value to write
-
-*Returns*: Subscribe to `SignalKClient.stream` events to receive results of actions.
-
-*Example:*
-
-```
-// ** connect to server **
-this.sk.connect(...);
-
-...
-// **** send update to STREAM API ****
-this.sk.stream.sendUpdate("vessels.self", "steering.autopilot.target.headingTrue", 1.52);
-
-this.sk.stream.sendUpdate("vessels.self", [
-    {path: "steering.autopilot.target.headingTrue", value: 1.52},
-    {path: "navigation.speedOverGround.", value: 12.52}
-]);
-```
----
-
 `subscribe(context, path, options?)`
 
 Subscribe to specific Signal K paths in the delta stream.
@@ -331,7 +391,7 @@ specify which updates to recieve in the delta stream.
 
 *Parameters:*
 
-- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+- *context*: Signal K context *e.g. 'vessels._<uuid_>', 'self'*
 
 - *path*: path to Signal K resource *(dotted notation)*. Can also be an array of valid Signal K subscription objects. 
 
@@ -370,7 +430,7 @@ Unubscribe from specific Signal K paths so data for the specified path(s) are no
 
 *Parameters:*
 
-- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+- *context*: Signal K context *e.g. 'vessels._<uuid_>', 'self'*
 
 - *path*: path to Signal K resource *(dotted notation)*. Can also be an array of valid Signal K paths. 
 
@@ -395,7 +455,7 @@ Send stream update to raise an alarm of the supplied name.
 
 *Parameters:*
 
-- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+- *context*: Signal K context *e.g. 'vessels._<uuid_>', 'self'*
 
 - *name*: String containing a name for the alarm or an AlarmType _(see AlarmType below)_. 
 
@@ -425,7 +485,7 @@ Send stream update to clear the alarm of the supplied name.
 
 *Parameters:*
 
-- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+- *context*: Signal K context *e.g. 'vessels._<uuid_>', 'self'*
 
 - *name*: Alarm name e.g.MOB, Anchor. 
 

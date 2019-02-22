@@ -19,6 +19,8 @@ The `api` object provides methods to facilitate interaction with the Signal K HT
 [Methods](#methods)
 - `get()`
 - `put()`
+- `post()`
+- `delete()`
 - `getMeta()`
 - `getSelf()`
 - `getSelfId()`
@@ -52,20 +54,27 @@ this.sk.api.get('/resources/waypoints').subscribe(
 );
 ```
 ---
-
-`put(context, path, value)`
+`put()`
 
 Send a HTTP PUT request to a path relative to the Signal K server HTTP API path. *i.e. `/signalk/v1/api`*.
 
-*results in HTTP PUT '<host>/signalk/v1/api/<path>' {value: <value>}*
+Overloaded method enables values to be supplied in the following ways: 
+
+`put(path, value)`
+
+*results in HTTP PUT '_<host_>/signalk/v1/api/_<path_>' {value: _<value_>}*
+
+`put(context, path, value)`
+
+*results in HTTP PUT '_<host_>/signalk/v1/api/_<context_>/_<path_>' {value:  {_<value_>} }*
 
 `put(context, path, key, value)`
 
-*results in HTTP PUT '<host>/signalk/v1/api/<path>' {value: <key>: {<value>} }*
+*results in HTTP PUT '_<host_>/signalk/v1/api/_<context_>/_<path_>/_<key_>' {value:  {_<value_>} }*
 
 *Parameters:*
 
-- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+- *context*: Signal K context *e.g. 'vessels._<uuid_>', 'self'*
 
 - *path*: path to Signal K resource  *(slash or dotted notation)*
 
@@ -94,13 +103,84 @@ this.sk.api.put(
 ```
 ---
 
+`post(path, value)`
+
+Send a HTTP POST request to a path relative to the Signal K server HTTP API path. *i.e. `/signalk/v1/api`*.
+
+
+*Parameters:*
+
+- *path*: path to Signal K resource  *(slash or dotted notation)*
+
+- *value*: value to be written
+
+*Returns*: Observable<HttpResponse>
+
+*Example:*
+
+```
+// ** connect to server **
+this.sk.connect(...);
+
+...
+this.sk.api.post(
+    'resource/waypoints', 
+    {
+        "urn:mrn:signalk:uuid:36f9b6b5-959f-46a1-8a68-82159742ccaa": {
+            "position": {"latitude":-35.02577800787516,"longitude":138.02825595260182},
+            "feature": {
+                "type":"Feature",
+                "geometry": {
+                    "type":"Point",
+                    "coordinates":[138.02825595260182,-35.02577800787516]
+                },
+                "properties":{"name":"gds","cmt":""},
+                "id":""
+            }
+        }
+    }
+).subscribe(
+    res=> { console.log(res) },
+    err=> { console.log(err) }
+);
+```
+---
+
+`delete(path)`
+
+Send a HTTP DELETE request to a path relative to the Signal K server HTTP API path. *i.e. `/signalk/v1/api`*.
+
+
+*Parameters:*
+
+- *path*: path to Signal K resource  *(slash or dotted notation)*
+
+
+*Returns*: Observable<HttpResponse>
+
+*Example:*
+
+```
+// ** connect to server **
+this.sk.connect(...);
+
+...
+this.sk.api.delete(
+    'resource/waypoints/urn:mrn:signalk:uuid:36f9b6b5-959f-46a1-8a68-82159742ccaa'
+).subscribe(
+    res=> { console.log(res) },
+    err=> { console.log(err) }
+);
+```
+---
+
 `getMeta(context, path)`
 
 Returns the metadata for the specified context and path in the Signal K tree.
 
 *Parameters:*
 
-- *context*: Signal K context *e.g. 'vessels.<uuid>', 'self'*
+- *context*: Signal K context *e.g. 'vessels._<uuid_>', 'self'*
 
 - *path*: path to Signal K resource *(slash or dotted notation)*
 
