@@ -6,9 +6,16 @@
 
 - Added `stream.login()` method.
 
-- Added `api.post()` method.
+- __Signal K Resources:__ 
+The following methods have been added/updated to align with  proposed `resources` section of the specification.
 
-- Added `api.delete()` method.
+    - Added `api.post()` method for use with resource creation.
+
+    - Added `api.delete()` method for removing resources.
+
+    - updated `api.put()` to ensure the resource uuid is part of the path.
+
+    - Added `api.put(path, value)` overload definition.
 
 
 ### v1.5.0

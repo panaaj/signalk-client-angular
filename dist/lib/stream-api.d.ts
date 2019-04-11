@@ -27,7 +27,9 @@ export declare class SignalKStream {
     close(): void;
     open(url: string, subscribe?: string, token?: string): void;
     private parseOnMessage;
+    sendRequest(value: any): string;
     put(context: string, path: string, value: any): string;
+    login(username: string, password: string): string;
     send(data: any): void;
     sendUpdate(context: string, path: Array<any>): any;
     sendUpdate(context: string, path: string, value: any): any;

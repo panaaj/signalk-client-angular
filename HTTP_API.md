@@ -64,6 +64,8 @@ Overloaded method enables values to be supplied in the following ways:
 
 *results in HTTP PUT '_<host_>/signalk/v1/api/_<path_>' {value: _<value_>}*
 
+Note: context is set to `vessels.self` if path does not start with `vessels`.
+
 `put(context, path, value)`
 
 *results in HTTP PUT '_<host_>/signalk/v1/api/_<context_>/_<path_>' {value:  {_<value_>} }*
