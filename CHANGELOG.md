@@ -1,5 +1,9 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.5.2
+
+- Fix url parameter processing issue.
+
 ### v1.5.1
 
 - Added `stream.sendRequest()` method.
