@@ -1,5 +1,11 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.5.3
+
+- Add support for using `stream` object in Angular Web Worker.
+
+_Note: The `worker` object will be deprecated in future releases._
+
 ### v1.5.2
 
 - Fix url parameter processing issue.

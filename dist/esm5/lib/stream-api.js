@@ -570,11 +570,11 @@ var SignalKStream = /** @class */ (function () {
      */
     function (msg) { return typeof msg.requestId != 'undefined'; };
     SignalKStream.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] },
+        { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
     /** @nocollapse */
     SignalKStream.ctorParameters = function () { return []; };
-    /** @nocollapse */ SignalKStream.ngInjectableDef = i0.defineInjectable({ factory: function SignalKStream_Factory() { return new SignalKStream(); }, token: SignalKStream, providedIn: "root" });
+    /** @nocollapse */ SignalKStream.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function SignalKStream_Factory() { return new SignalKStream(); }, token: SignalKStream, providedIn: "root" });
     return SignalKStream;
 }());
 export { SignalKStream };

@@ -61,11 +61,11 @@ export class SignalKStreamWorker {
     } }
 }
 SignalKStreamWorker.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] },
+    { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
 /** @nocollapse */
 SignalKStreamWorker.ctorParameters = () => [];
-/** @nocollapse */ SignalKStreamWorker.ngInjectableDef = i0.defineInjectable({ factory: function SignalKStreamWorker_Factory() { return new SignalKStreamWorker(); }, token: SignalKStreamWorker, providedIn: "root" });
+/** @nocollapse */ SignalKStreamWorker.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function SignalKStreamWorker_Factory() { return new SignalKStreamWorker(); }, token: SignalKStreamWorker, providedIn: "root" });
 if (false) {
     /**
      * @type {?}

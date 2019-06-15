@@ -237,13 +237,13 @@ var SignalKHttp = /** @class */ (function () {
         }
     };
     SignalKHttp.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] },
+        { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
     /** @nocollapse */
     SignalKHttp.ctorParameters = function () { return [
         { type: HttpClient }
     ]; };
-    /** @nocollapse */ SignalKHttp.ngInjectableDef = i0.defineInjectable({ factory: function SignalKHttp_Factory() { return new SignalKHttp(i0.inject(i1.HttpClient)); }, token: SignalKHttp, providedIn: "root" });
+    /** @nocollapse */ SignalKHttp.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function SignalKHttp_Factory() { return new SignalKHttp(i0.ɵɵinject(i1.HttpClient)); }, token: SignalKHttp, providedIn: "root" });
     return SignalKHttp;
 }());
 export { SignalKHttp };

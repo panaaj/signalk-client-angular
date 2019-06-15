@@ -15,11 +15,13 @@ export declare class SignalKClient {
     private _version;
     private _token;
     private debug;
+    private fallbackEndpoints;
     server: {
         endpoints: {};
         info: {};
         apiVersions: any[];
     };
+    fallback: boolean;
     version: number;
     authToken: string;
     readonly message: typeof Message;
@@ -27,7 +29,7 @@ export declare class SignalKClient {
     constructor(http: HttpClient, api: SignalKHttp, stream: SignalKStream, worker: SignalKStreamWorker);
     ngOnDestroy(): void;
     private init;
-    hello(hostname?: string, port?: number, useSSL?: boolean): import("rxjs/internal/Observable").Observable<Object>;
+    hello(hostname?: string, port?: number, useSSL?: boolean): import("rxjs").Observable<Object>;
     connect(hostname?: string, port?: number, useSSL?: boolean): Promise<any>;
     disconnect(): void;
     connectStream(hostname?: string, port?: number, useSSL?: boolean, subscribe?: string): Promise<{}>;
@@ -38,10 +40,10 @@ export declare class SignalKClient {
     resolveStreamEndpoint(): string;
     private resolveHttpEndpoint;
     private disconnectedFromServer;
-    get(path: string): import("rxjs/internal/Observable").Observable<Object>;
-    put(path: string, value: any): import("rxjs/internal/Observable").Observable<Object>;
-    post(path: string, value: any): import("rxjs/internal/Observable").Observable<Object>;
-    login(username: string, password: string): import("rxjs/internal/Observable").Observable<Object>;
-    logout(): import("rxjs/internal/Observable").Observable<Object>;
-    snapshot(context: string, time: string): import("rxjs/internal/Observable").Observable<Object>;
+    get(path: string): import("rxjs").Observable<Object>;
+    put(path: string, value: any): import("rxjs").Observable<Object>;
+    post(path: string, value: any): import("rxjs").Observable<Object>;
+    login(username: string, password: string): import("rxjs").Observable<Object>;
+    logout(): import("rxjs").Observable<Object>;
+    snapshot(context: string, time: string): import("rxjs").Observable<Object>;
 }
