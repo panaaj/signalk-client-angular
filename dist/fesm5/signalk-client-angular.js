@@ -1266,6 +1266,44 @@ var SignalKStream = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+var SignalKApps = /** @class */ (function () {
+    // *******************************************************    
+    function SignalKApps(http) {
+        this.http = http;
+    }
+    /**
+     * @return {?}
+     */
+    SignalKApps.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () { };
+    // ** return App List
+    // ** return App List
+    /**
+     * @return {?}
+     */
+    SignalKApps.prototype.list = 
+    // ** return App List
+    /**
+     * @return {?}
+     */
+    function () { return this.http.get(this.endpoint); };
+    SignalKApps.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    SignalKApps.ctorParameters = function () { return [
+        { type: HttpClient }
+    ]; };
+    /** @nocollapse */ SignalKApps.ngInjectableDef = ɵɵdefineInjectable({ factory: function SignalKApps_Factory() { return new SignalKApps(ɵɵinject(HttpClient)); }, token: SignalKApps, providedIn: "root" });
+    return SignalKApps;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var SignalKStreamWorker = /** @class */ (function () {
     // *******************************************************    
     function SignalKStreamWorker() {
@@ -1273,6 +1311,9 @@ var SignalKStreamWorker = /** @class */ (function () {
         this.onError = this._error.asObservable();
         this._message = new Subject();
         this.onMessage = this._message.asObservable();
+        if (isDevMode()) {
+            console.warn("DEPRECATION WARNING: SignalKClient.worker is replaced by the signalk-worker-angular package and will be removed in signalk-client-angular v1.6");
+        }
     }
     /**
      * @return {?}
@@ -1357,8 +1398,9 @@ var SignalKStreamWorker = /** @class */ (function () {
  */
 var SignalKClient = /** @class */ (function () {
     // *******************************************************
-    function SignalKClient(http, api, stream, worker) {
+    function SignalKClient(http, apps, api, stream, worker) {
         this.http = http;
+        this.apps = apps;
         this.api = api;
         this.stream = stream;
         this.worker = worker;
@@ -1789,6 +1831,27 @@ var SignalKClient = /** @class */ (function () {
         this.server.apiVersions = (this.server.endpoints) ? Object.keys(this.server.endpoints) : [];
         this.debug(this.server.endpoints);
         this.api.server = this.server.info;
+        this.apps.endpoint = this.resolveAppsEndpoint();
+    };
+    // ** return signalk apps api url
+    // ** return signalk apps api url
+    /**
+     * @private
+     * @return {?}
+     */
+    SignalKClient.prototype.resolveAppsEndpoint = 
+    // ** return signalk apps api url
+    /**
+     * @private
+     * @return {?}
+     */
+    function () {
+        if (this.server.info['id'] == 'signalk-server-node') {
+            return this.protocol + "://" + this.hostname + ":" + this.port + "/webapps";
+        }
+        else {
+            return this.resolveHttpEndpoint().replace('api', 'apps');
+        }
     };
     // ** return preferred WS stream url
     // ** return preferred WS stream url
@@ -2021,11 +2084,12 @@ var SignalKClient = /** @class */ (function () {
     /** @nocollapse */
     SignalKClient.ctorParameters = function () { return [
         { type: HttpClient },
+        { type: SignalKApps },
         { type: SignalKHttp },
         { type: SignalKStream },
         { type: SignalKStreamWorker }
     ]; };
-    /** @nocollapse */ SignalKClient.ngInjectableDef = ɵɵdefineInjectable({ factory: function SignalKClient_Factory() { return new SignalKClient(ɵɵinject(HttpClient), ɵɵinject(SignalKHttp), ɵɵinject(SignalKStream), ɵɵinject(SignalKStreamWorker)); }, token: SignalKClient, providedIn: "root" });
+    /** @nocollapse */ SignalKClient.ngInjectableDef = ɵɵdefineInjectable({ factory: function SignalKClient_Factory() { return new SignalKClient(ɵɵinject(HttpClient), ɵɵinject(SignalKApps), ɵɵinject(SignalKHttp), ɵɵinject(SignalKStream), ɵɵinject(SignalKStreamWorker)); }, token: SignalKClient, providedIn: "root" });
     return SignalKClient;
 }());
 
@@ -2058,5 +2122,5 @@ var SignalKClientModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { Alarm, AlarmMethod, AlarmState, AlarmType, Message, Path, SignalKClient, SignalKClientModule, SignalKHttp, SignalKStream, SignalKStreamWorker as ɵa, UUID as ɵb };
+export { Alarm, AlarmMethod, AlarmState, AlarmType, Message, Path, SignalKApps, SignalKClient, SignalKClientModule, SignalKHttp, SignalKStream, SignalKStreamWorker as ɵa, UUID as ɵb };
 //# sourceMappingURL=signalk-client-angular.js.map

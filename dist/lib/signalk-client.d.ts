@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { SignalKHttp } from './http-api';
 import { SignalKStream } from './stream-api';
+import { SignalKApps } from './apps-api';
 import { Message } from './utils';
 import { SignalKStreamWorker } from './stream-worker';
 import { UUID } from './uuid';
 export declare class SignalKClient {
     private http;
+    apps: SignalKApps;
     api: SignalKHttp;
     stream: SignalKStream;
     worker: SignalKStreamWorker;
@@ -26,7 +28,7 @@ export declare class SignalKClient {
     authToken: string;
     readonly message: typeof Message;
     readonly uuid: UUID;
-    constructor(http: HttpClient, api: SignalKHttp, stream: SignalKStream, worker: SignalKStreamWorker);
+    constructor(http: HttpClient, apps: SignalKApps, api: SignalKHttp, stream: SignalKStream, worker: SignalKStreamWorker);
     ngOnDestroy(): void;
     private init;
     hello(hostname?: string, port?: number, useSSL?: boolean): import("rxjs").Observable<Object>;
@@ -37,6 +39,7 @@ export declare class SignalKClient {
     openStream(url?: string, subscribe?: string, token?: string): true | Error;
     openPlayback(url?: string, options?: any, token?: string): true | Error;
     private processHello;
+    private resolveAppsEndpoint;
     resolveStreamEndpoint(): string;
     private resolveHttpEndpoint;
     private disconnectedFromServer;

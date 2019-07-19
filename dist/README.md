@@ -12,15 +12,20 @@ Version 1.5.0 introduces the following classes to interact with Signal K API's:
 
 - `stream` class for interacting with Signal K STREAM API
 
-- `worker` class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
+---
+- `worker` __(DEPRECATED)__ class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
+
+NOTE: Angular 8 CLI now supports Web Workers. In alignment with this pattern the `signalk-worker-angular` library has been created to work alongside this library. The `worker` class will be removed in `signalk-client-angular v1.6`). Details of the `signalk-worker-angular` library can be found on [**GitHub**](https://github.com/panaaj/signalk-worker-angular/tree/master/dist).
+
+
+---
 
 See below for some [Examples](#usage) below to see how to use the updated library..
 
----
 
-Please see the detailed [**Documentation**](https://github.com/panaaj/signalk-client-angular/tree/master/dist) on GitHub for how to use the updated library.
+Detailed documentation for using this library can be found on [**GitHub**](https://github.com/panaaj/signalk-client-angular/tree/master/dist).
 
----
+
 
 ## Installation
 
@@ -28,7 +33,7 @@ Please see the detailed [**Documentation**](https://github.com/panaaj/signalk-cl
 npm install signalk-client-angular
 ```
 
----
+
 
 ## Usage
 

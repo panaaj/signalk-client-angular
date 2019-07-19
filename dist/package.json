@@ -1,6 +1,6 @@
 {
   "name": "signalk-client-angular",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Signal K client library for Angular.",
   "keywords": [
     "angular",
@@ -17,8 +17,8 @@
   "repository": "https://github.com/panaaj/signalk-client-angular",
   "license": "Apache-20",
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+    "@angular/common": "^8.0.0",
+    "@angular/core": "^8.0.0"
   },
   "main": "bundles/signalk-client-angular.umd.js",
   "module": "fesm5/signalk-client-angular.js",

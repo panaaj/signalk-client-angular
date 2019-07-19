@@ -1,5 +1,10 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.5.4
+
+- Add `apps` object to provide inital support for proposed API for installed applications on SignalK server.
+
+
 ### v1.5.3
 
 - Add support for using `stream` object in Angular Web Worker.
