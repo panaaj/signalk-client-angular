@@ -1,5 +1,11 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.6.0
+
+- __Removed__ `worker` object. Use `signalk-worker-angular` to interact with Signal K stream via a web worker.
+
+- Update `apps` to work with `signalk-node-server` _(v1.24.0 or higher)_ support for the app API.
+
 ### v1.5.4
 
 - Add `apps` object to provide inital support for proposed API for installed applications on SignalK server.

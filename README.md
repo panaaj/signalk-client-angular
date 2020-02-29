@@ -2,17 +2,13 @@
 
 **SignalKClient** is an Angular library to facilitate communication with a Signal K server.
 
-It provides methods to access both the Signal K HTTP and STREAM APIs as well as exposing STREAM `Events`.
-
-**Note: Version 1.5.0 represents a significant refactoring of SignalKClient to better align it with recent enhancements to the Signal K specification. It contains MANY BREAKING CHANGES so please review this document before upgrading!**
-
-Version 1.5.0 introduces the following classes to interact with Signal K API's:
+It provides the following classes to interact with the Signal K `HTTP` and `STREAM` APIs as well as exposing STREAM `Events`:
 
 [api](HTTP_API.md): class for interacting with Signal K HTTP API
 
 [stream](STREAM_API.md): class for interacting with Signal K STREAM API
 
-[worker](WORKER.md): class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
+[app](APP.md): class for interacting with applications installed on the Signal K server.
 
 See [SignalKClient API](#signalkclient-api) below for details.
 
