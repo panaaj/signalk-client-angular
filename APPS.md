@@ -1,6 +1,6 @@
-# APP:
+# APPS:
 
-The `app` object provides methods to facilitate interaction with applications installed on the Signal K server.
+The `apps` object provides methods to facilitate interaction with applications installed on the Signal K server.
 
 i.e. /signalk/v1/apps
 

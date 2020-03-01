@@ -10,7 +10,7 @@ The `api` object provides methods to facilitate interaction with the Signal K HT
 
 [stream](STREAM_API.md): class for interacting with Signal K STREAM API
 
-[worker](WORKER.md): class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
+[apps](APPS.md): class to enable interaction with applications installed on the Signal K server.
 
 *Follow the links for the relevant documentation.*
 

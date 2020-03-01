@@ -8,7 +8,7 @@ It provides the following classes to interact with the Signal K `HTTP` and `STRE
 
 [stream](STREAM_API.md): class for interacting with Signal K STREAM API
 
-[app](APP.md): class for interacting with applications installed on the Signal K server.
+[apps](APPS.md): class to enable interaction with applications installed on the Signal K server.
 
 See [SignalKClient API](#signalkclient-api) below for details.
 
@@ -176,44 +176,6 @@ this.sk.openStream('192.168.99.100', 80, false, 'self');
 ```
 ---
 
-### Using a WebWorker
-
-You can provide a `WebWorker` script to interact with a Signal K server stream to allow stream data processing to occur off the main thread. This is useful when performing significant amounts of data processing pror to handing the data to your application.
-
-This is done via the `worker` object.
-
-- Use the `init('<path_to_worker_file>.js`)` to 
-
-- By subscribing to the `worker` events you can receive processed data from your worker.
-
-- Use `postMessage()` to communicate with your worker and `terminate()` to terminate it.
-
-*Note: In this initial version the WebWorker logic needs to be provided in a javascript file. SiganlKClient acts as a broker for your Angular application to communicate with the WebWorker*
-
-
-*Example:*
-```
-// **** Subscribe to Signal K Stream events ***
-
-this.sk.worker.onError.subscribe( e=> {
-    ...handle WebWorker error event
-});
-this.sk.worker.onMessage.subscribe( e=> {
-    ...handle received message from WebWorker
-});    
-
-// **** INITIALISE WebWorker ****
-this.sk.worker.init('./assets/js/signalk-worker.js');
-
-// **** Interact with WebWorker ****
-this.sk.worker.postMessage(..);
-
-// **** Terminate WebWorker ****
-this.sk.worker.terminate(..);
-```
-
----
-
 # SignalKClient API
 
 SignalKClient contains the following classes to interact with Signal K API's:
@@ -222,7 +184,7 @@ SignalKClient contains the following classes to interact with Signal K API's:
 
 [stream](STREAM_API.md): class for interacting with Signal K STREAM API
 
-[worker](WORKER.md): class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
+[apps](APPS.md): class to enable interaction with applications installed on the Signal K server.
 
 *Follow the links for the relevant documentation.*
 
@@ -598,8 +560,6 @@ Returns preferred STREAM API url based on:
 1. Discovered stream endpoint urls
 
 2. Preferred API version set with `version` attribute.
-
-*This method provides a convenient way to get a stream url for use with `worker`.*
 
 ---------------------------------------------------------
 
