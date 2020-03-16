@@ -3,14 +3,17 @@ import { SignalKHttp } from './http-api';
 import { SignalKStream } from './stream-api';
 import { SignalKApps } from './apps-api';
 import { Message } from './utils';
-import { SignalKStreamWorker } from './stream-worker';
 import { UUID } from './uuid';
+interface IServer_Info {
+    endpoints: any;
+    info: any;
+    apiVersions: Array<any>;
+}
 export declare class SignalKClient {
     private http;
     apps: SignalKApps;
     api: SignalKHttp;
     stream: SignalKStream;
-    worker: SignalKStreamWorker;
     private hostname;
     private port;
     private protocol;
@@ -18,17 +21,13 @@ export declare class SignalKClient {
     private _token;
     private debug;
     private fallbackEndpoints;
-    server: {
-        endpoints: {};
-        info: {};
-        apiVersions: any[];
-    };
+    server: IServer_Info;
     fallback: boolean;
     version: number;
     authToken: string;
     readonly message: typeof Message;
     readonly uuid: UUID;
-    constructor(http: HttpClient, apps: SignalKApps, api: SignalKHttp, stream: SignalKStream, worker: SignalKStreamWorker);
+    constructor(http: HttpClient, apps: SignalKApps, api: SignalKHttp, stream: SignalKStream);
     ngOnDestroy(): void;
     private init;
     hello(hostname?: string, port?: number, useSSL?: boolean): import("rxjs").Observable<Object>;
@@ -50,3 +49,4 @@ export declare class SignalKClient {
     logout(): import("rxjs").Observable<Object>;
     snapshot(context: string, time: string): import("rxjs").Observable<Object>;
 }
+export {};

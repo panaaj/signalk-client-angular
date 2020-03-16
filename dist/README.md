@@ -2,25 +2,24 @@
 
 **SignalKClient** is an Angular library to facilitate communication with a Signal K server.
 
-It provides methods to access both the Signal K HTTP and STREAM APIs as well as exposing STREAM `Events`.
-
-**Note: Version 1.5.0 represents a significant refactoring of SignalKClient to better align it with recent enhancements to the Signal K specification. It contains MANY BREAKING CHANGES so please review this document before upgrading!**
-
-Version 1.5.0 introduces the following classes to interact with Signal K API's:
+It provides the following classes to interact with Signal K `HTTP` and `STREAM` APIs as well as exposing STREAM `Events`:
 
 - `api` class for interacting with Signal K HTTP API
 
 - `stream` class for interacting with Signal K STREAM API
 
----
-- `worker` __(DEPRECATED)__ class to enable the use of a WebWorker script to enable client data processing to occur off the main thread.
-
-NOTE: Angular 8 CLI now supports Web Workers. In alignment with this pattern the `signalk-worker-angular` library has been created to work alongside this library. The `worker` class will be removed in `signalk-client-angular v1.6`). Details of the `signalk-worker-angular` library can be found on [**GitHub**](https://github.com/panaaj/signalk-worker-angular/tree/master/dist).
-
+- `apps` class to enable interaction with applications installed on the Signal K server
 
 ---
+NOTE: To connect to a Signal K stream using a web worker use the `signalk-worker-angular` library in conjunction with this library.
 
-See below for some [Examples](#usage) below to see how to use the updated library..
+```
+npm i signalk-worker-angular
+```
+
+---
+
+See below for some [Examples](#usage) below to see how to use this library..
 
 
 Detailed documentation for using this library can be found on [**GitHub**](https://github.com/panaaj/signalk-client-angular/tree/master/dist).
@@ -183,42 +182,4 @@ this.sk.stream.onMessage.subscribe( e=> {
 // **** CONNECT to Signal K Server ****
 this.sk.openStream('192.168.99.100', 80, false, 'self');
 ```
----
-
-### Using a WebWorker
-
-You can provide a `WebWorker` script to interact with a Signal K server stream to allow stream data processing to occur off the main thread. This is useful when performing significant amounts of data processing pror to handing the data to your application.
-
-This is done via the `worker` object.
-
-- Use the `init('<path_to_worker_file>.js`)` to 
-
-- By subscribing to the `worker` events you can receive processed data from your worker.
-
-- Use `postMessage()` to communicate with your worker and `terminate()` to terminate it.
-
-*Note: In this initial version the WebWorker logic needs to be provided in a javascript file. SiganlKClient acts as a broker for your Angular application to communicate with the WebWorker*
-
-
-*Example:*
-```
-// **** Subscribe to Signal K Stream events ***
-
-this.sk.worker.onError.subscribe( e=> {
-    ...handle WebWorker error event
-});
-this.sk.worker.onMessage.subscribe( e=> {
-    ...handle received message from WebWorker
-});    
-
-// **** INITIALISE WebWorker ****
-this.sk.worker.init('./assets/js/signalk-worker.js');
-
-// **** Interact with WebWorker ****
-this.sk.worker.postMessage(..);
-
-// **** Terminate WebWorker ****
-this.sk.worker.terminate(..);
-```
-
 ---

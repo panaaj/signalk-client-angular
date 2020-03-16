@@ -70,6 +70,7 @@ UUID = /** @class */ (function () {
         }
         return ints;
     };
+    ;
     /**
      * @private
      * @param {?} bits
@@ -81,6 +82,7 @@ UUID = /** @class */ (function () {
      * @return {?}
      */
     function (bits) { return Math.pow(2, bits); };
+    ;
     /**
      * @private
      * @param {?} min
@@ -186,6 +188,7 @@ UUID = /** @class */ (function () {
     function () {
         this.fromParts(this.randomUI32(), this.randomUI16(), 0x4000 | this.randomUI12(), 0x80 | this.randomUI06(), this.randomUI08(), this.randomUI48());
     };
+    ;
     /**
      * @private
      * @param {?} string
@@ -213,6 +216,7 @@ UUID = /** @class */ (function () {
         }
         return string;
     };
+    ;
     /**
      * @private
      * @template THIS
@@ -251,8 +255,72 @@ UUID = /** @class */ (function () {
             + (/** @type {?} */ (this)).paddedString(node.toString(16), 12);
         return (/** @type {?} */ (this));
     };
+    ;
     return UUID;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.limitUI04;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.limitUI06;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.limitUI08;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.limitUI12;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.limitUI14;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.limitUI16;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.limitUI32;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.limitUI40;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.limitUI48;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.version;
+    /**
+     * @type {?}
+     * @private
+     */
+    UUID.prototype.hex;
+    /* Skipping unhandled member: ;*/
+    /* Skipping unhandled member: ;*/
+    /* Skipping unhandled member: ;*/
+    /* Skipping unhandled member: ;*/
+    /* Skipping unhandled member: ;*/
+}
+;
 
 /**
  * @fileoverview added by tsickle
@@ -395,9 +463,11 @@ Alarm = /** @class */ (function () {
         if (visual) {
             this._method.push(AlarmMethod.visual);
         }
+        ;
         if (sound) {
             this._method.push(AlarmMethod.sound);
         }
+        ;
     }
     Object.defineProperty(Alarm.prototype, "value", {
         get: /**
@@ -415,6 +485,23 @@ Alarm = /** @class */ (function () {
     });
     return Alarm;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    Alarm.prototype._state;
+    /**
+     * @type {?}
+     * @private
+     */
+    Alarm.prototype._method;
+    /**
+     * @type {?}
+     * @private
+     */
+    Alarm.prototype._message;
+}
 /** @enum {string} */
 var AlarmState = {
     normal: 'normal',
@@ -423,11 +510,13 @@ var AlarmState = {
     alarm: 'alarm',
     emergency: 'emergency',
 };
+;
 /** @enum {string} */
 var AlarmMethod = {
     visual: 'visual',
     sound: 'sound',
 };
+;
 /** @enum {string} */
 var AlarmType = {
     mob: 'notifications.mob',
@@ -591,6 +680,8 @@ var SignalKHttp = /** @class */ (function () {
             context = '';
             if (this.server && this.server.id == 'signalk-server-node') { // ** check for node server
                 // ** check for node server
+                //let ver= this.server.info['version'].split('.');
+                //if(ver[1]<100) { // detect older versions
                 // ** re-format value { uuid: { <resource_data> }}
                 /** @type {?} */
                 var v_1 = JSON.parse(JSON.stringify(msg.value));
@@ -598,6 +689,7 @@ var SignalKHttp = /** @class */ (function () {
                 msg.value[r[r.length - 1]] = v_1;
                 // ** add self context and remove uuid from path
                 path = 'vessels/self/' + r.slice(0, r.length - 1).join('/');
+                //}
             }
         }
         // ****************************************
@@ -685,6 +777,22 @@ var SignalKHttp = /** @class */ (function () {
     /** @nocollapse */ SignalKHttp.ngInjectableDef = ɵɵdefineInjectable({ factory: function SignalKHttp_Factory() { return new SignalKHttp(ɵɵinject(HttpClient)); }, token: SignalKHttp, providedIn: "root" });
     return SignalKHttp;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKHttp.prototype._token;
+    /** @type {?} */
+    SignalKHttp.prototype.server;
+    /** @type {?} */
+    SignalKHttp.prototype.endpoint;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKHttp.prototype.http;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1261,6 +1369,67 @@ var SignalKStream = /** @class */ (function () {
     /** @nocollapse */ SignalKStream.ngInjectableDef = ɵɵdefineInjectable({ factory: function SignalKStream_Factory() { return new SignalKStream(); }, token: SignalKStream, providedIn: "root" });
     return SignalKStream;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKStream.prototype._connect;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKStream.prototype._close;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKStream.prototype._error;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKStream.prototype._message;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKStream.prototype.ws;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKStream.prototype._filter;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKStream.prototype._wsTimeout;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKStream.prototype._token;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKStream.prototype._playbackMode;
+    /** @type {?} */
+    SignalKStream.prototype.onConnect;
+    /** @type {?} */
+    SignalKStream.prototype.onClose;
+    /** @type {?} */
+    SignalKStream.prototype.onError;
+    /** @type {?} */
+    SignalKStream.prototype.onMessage;
+    /** @type {?} */
+    SignalKStream.prototype.endpoint;
+    /** @type {?} */
+    SignalKStream.prototype.selfId;
+    /** @type {?} */
+    SignalKStream.prototype._source;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1278,17 +1447,22 @@ var SignalKApps = /** @class */ (function () {
      * @return {?}
      */
     function () { };
-    // ** return App List
-    // ** return App List
+    // ** return List of installed apps
+    // ** return List of installed apps
     /**
      * @return {?}
      */
     SignalKApps.prototype.list = 
-    // ** return App List
+    // ** return List of installed apps
     /**
      * @return {?}
      */
-    function () { return this.http.get(this.endpoint); };
+    function () {
+        /** @type {?} */
+        var ep = (this.endpoint.indexOf('webapps') == -1) ?
+            this.endpoint + "list" : this.endpoint;
+        return this.http.get(ep);
+    };
     SignalKApps.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -1299,111 +1473,39 @@ var SignalKApps = /** @class */ (function () {
     /** @nocollapse */ SignalKApps.ngInjectableDef = ɵɵdefineInjectable({ factory: function SignalKApps_Factory() { return new SignalKApps(ɵɵinject(HttpClient)); }, token: SignalKApps, providedIn: "root" });
     return SignalKApps;
 }());
+if (false) {
+    /** @type {?} */
+    SignalKApps.prototype.endpoint;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKApps.prototype.http;
+}
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var SignalKStreamWorker = /** @class */ (function () {
-    // *******************************************************    
-    function SignalKStreamWorker() {
-        this._error = new Subject();
-        this.onError = this._error.asObservable();
-        this._message = new Subject();
-        this.onMessage = this._message.asObservable();
-        if (isDevMode()) {
-            console.warn("DEPRECATION WARNING: SignalKClient.worker is replaced by the signalk-worker-angular package and will be removed in signalk-client-angular v1.6");
-        }
-    }
-    /**
-     * @return {?}
-     */
-    SignalKStreamWorker.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () { this.worker.terminate(); this.worker = undefined; };
-    // ** Initialise worker
-    // ** Initialise worker
-    /**
-     * @param {?} pathToFile
-     * @return {?}
-     */
-    SignalKStreamWorker.prototype.init = 
-    // ** Initialise worker
-    /**
-     * @param {?} pathToFile
-     * @return {?}
-     */
-    function (pathToFile) {
-        var _this = this;
-        if (typeof (Worker) == "undefined") {
-            return false;
-        }
-        if (this.worker) {
-            this.worker.terminate();
-        } // ** terminate an open worker
-        this.worker = new Worker(pathToFile);
-        this.worker.onmessage = (/**
-         * @param {?} event
-         * @return {?}
-         */
-        function (event) { _this._message.next(event); });
-        this.worker.onerror = (/**
-         * @param {?} event
-         * @return {?}
-         */
-        function (event) { _this._error.next(event); });
-        // ** worker ready for postMessage()
-    };
-    // ** Send message to worker
-    // ** Send message to worker
-    /**
-     * @param {?} msg
-     * @return {?}
-     */
-    SignalKStreamWorker.prototype.postMessage = 
-    // ** Send message to worker
-    /**
-     * @param {?} msg
-     * @return {?}
-     */
-    function (msg) { if (this.worker) {
-        this.worker.postMessage(msg);
-    } };
-    // ** terminate worker
-    // ** terminate worker
-    /**
-     * @return {?}
-     */
-    SignalKStreamWorker.prototype.terminate = 
-    // ** terminate worker
-    /**
-     * @return {?}
-     */
-    function () { if (this.worker) {
-        this.worker.terminate();
-    } };
-    SignalKStreamWorker.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    SignalKStreamWorker.ctorParameters = function () { return []; };
-    /** @nocollapse */ SignalKStreamWorker.ngInjectableDef = ɵɵdefineInjectable({ factory: function SignalKStreamWorker_Factory() { return new SignalKStreamWorker(); }, token: SignalKStreamWorker, providedIn: "root" });
-    return SignalKStreamWorker;
-}());
-
 /**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @record
  */
+function IServer_Info() { }
+if (false) {
+    /** @type {?} */
+    IServer_Info.prototype.endpoints;
+    /** @type {?} */
+    IServer_Info.prototype.info;
+    /** @type {?} */
+    IServer_Info.prototype.apiVersions;
+}
 var SignalKClient = /** @class */ (function () {
     // *******************************************************
-    function SignalKClient(http, apps, api, stream, worker) {
+    function SignalKClient(http, apps, api, stream) {
         this.http = http;
         this.apps = apps;
         this.api = api;
         this.stream = stream;
-        this.worker = worker;
         this._version = 'v1'; // ** default Signal K api version
         // ** endpoints to fallback to if hello response is not received.
         this.fallbackEndpoints = {
@@ -1645,7 +1747,7 @@ var SignalKClient = /** @class */ (function () {
     /**
      * @return {?}
      */
-    function () { this.stream.close(); this.worker.terminate(); };
+    function () { this.stream.close(); };
     // ** Connect + open Delta Stream (endpoint discovery)
     // ** Connect + open Delta Stream (endpoint discovery)
     /**
@@ -1846,12 +1948,16 @@ var SignalKClient = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (this.server.info['id'] == 'signalk-server-node') {
-            return this.protocol + "://" + this.hostname + ":" + this.port + "/webapps";
+        /** @type {?} */
+        var url = this.resolveHttpEndpoint().replace('api', 'apps');
+        if (this.server && this.server.info.id == 'signalk-server-node') {
+            /** @type {?} */
+            var ver = this.server.info['version'].split('.');
+            if (ver[1] < 26) { //use legacy link for older versions
+                url = this.protocol + "://" + this.hostname + ":" + this.port + "/webapps";
+            }
         }
-        else {
-            return this.resolveHttpEndpoint().replace('api', 'apps');
-        }
+        return url;
     };
     // ** return preferred WS stream url
     // ** return preferred WS stream url
@@ -1949,6 +2055,7 @@ var SignalKClient = /** @class */ (function () {
             return this.http.get(url);
         }
     };
+    ;
     //** return observable response for put to http path
     //** return observable response for put to http path
     /**
@@ -1976,6 +2083,7 @@ var SignalKClient = /** @class */ (function () {
             return this.http.put(url, value);
         }
     };
+    ;
     //** return observable response for post to http path
     //** return observable response for post to http path
     /**
@@ -2003,6 +2111,7 @@ var SignalKClient = /** @class */ (function () {
             return this.http.post(url, value);
         }
     };
+    ;
     // ** get auth token for supplied user details **
     // ** get auth token for supplied user details **
     /**
@@ -2086,12 +2195,61 @@ var SignalKClient = /** @class */ (function () {
         { type: HttpClient },
         { type: SignalKApps },
         { type: SignalKHttp },
-        { type: SignalKStream },
-        { type: SignalKStreamWorker }
+        { type: SignalKStream }
     ]; };
-    /** @nocollapse */ SignalKClient.ngInjectableDef = ɵɵdefineInjectable({ factory: function SignalKClient_Factory() { return new SignalKClient(ɵɵinject(HttpClient), ɵɵinject(SignalKApps), ɵɵinject(SignalKHttp), ɵɵinject(SignalKStream), ɵɵinject(SignalKStreamWorker)); }, token: SignalKClient, providedIn: "root" });
+    /** @nocollapse */ SignalKClient.ngInjectableDef = ɵɵdefineInjectable({ factory: function SignalKClient_Factory() { return new SignalKClient(ɵɵinject(HttpClient), ɵɵinject(SignalKApps), ɵɵinject(SignalKHttp), ɵɵinject(SignalKStream)); }, token: SignalKClient, providedIn: "root" });
     return SignalKClient;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKClient.prototype.hostname;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKClient.prototype.port;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKClient.prototype.protocol;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKClient.prototype._version;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKClient.prototype._token;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKClient.prototype.fallbackEndpoints;
+    /** @type {?} */
+    SignalKClient.prototype.server;
+    /** @type {?} */
+    SignalKClient.prototype.fallback;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKClient.prototype.http;
+    /** @type {?} */
+    SignalKClient.prototype.apps;
+    /** @type {?} */
+    SignalKClient.prototype.api;
+    /** @type {?} */
+    SignalKClient.prototype.stream;
+    /* Skipping unhandled member: ;*/
+    /* Skipping unhandled member: ;*/
+    /* Skipping unhandled member: ;*/
+}
 
 /**
  * @fileoverview added by tsickle
@@ -2122,5 +2280,5 @@ var SignalKClientModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { Alarm, AlarmMethod, AlarmState, AlarmType, Message, Path, SignalKApps, SignalKClient, SignalKClientModule, SignalKHttp, SignalKStream, SignalKStreamWorker as ɵa, UUID as ɵb };
+export { Alarm, AlarmMethod, AlarmState, AlarmType, Message, Path, SignalKApps, SignalKClient, SignalKClientModule, SignalKHttp, SignalKStream, UUID as ɵa };
 //# sourceMappingURL=signalk-client-angular.js.map
