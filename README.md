@@ -18,6 +18,22 @@ Please see the [**Usage**](#usage) section below for guidance on how to use the 
 
 ---
 
+### Breaking Changes:
+
+As of `version 1.7` the following methods return an `Observable` rather than a `Promise`.
+
+- `connect()`
+- `connectStream()`
+- `connectPlayback()`
+
+To continue using `Promise`s update your code to use the following methods:
+
+- `connectAsPromise()`
+- `connectStreamAsPromise()`
+- `connectPlaybackAsPromise()`
+
+---
+
 ## Installation
 
 ```
@@ -209,6 +225,14 @@ SignalKClient contains the following classes to interact with Signal K API's:
 - `post()`
 - `login()`
 - `logout()`
+- `isLoggedIn()`
+- `setAppId()`
+- `setAppVersion()`
+- `appDataVersions()`
+- `appDataKeys()`
+- `appDataGet()`
+- `appDataSet()`
+- `appDataPatch()`
 
 ---
 
@@ -318,11 +342,40 @@ this.sk.hello('myServer', 80, false).subscribe(
     error=> { ... }
 );
 ```
-
 ---
-`connect(hostname, port, useSSL, subscribe):Promise`
+`connect(hostname, port, useSSL, subscribe):Observable`
 
 Connect to Signal K server and perform service endpoint discovery to initalise SignalKClient for operation.
+
+This method performs the following:
+
+1. Issues a `hello()` request
+2. Populates the `server` attibute with the received data
+
+*Parameters:*
+
+- *hostname*: host name or ip address
+
+- *port*:     port number
+
+- *useSSL*:   true: uses secure socket protocols *(https / wss)*
+
+- *subscribe*: Signal K subcription request value: 'all', 'self' or 'none'. *(Uses server default if null)*
+
+*Returns*: Observable
+
+*Example:*
+```
+this.sk.connect('myServer', 80, false).subscribe( 
+    r=>{ ... },
+    e=>{ ... } 
+);
+```
+
+---
+`connectAsPromise(hostname, port, useSSL, subscribe):Promise`
+
+Same as `connect()` but returns a Promise.
 
 This method performs the following:
 
@@ -358,12 +411,60 @@ Disconnects from Signal K server and closes all connections.
 ```
 this.sk.disconnect();
 ```
+---
+
+`connectStream(hostname, port, useSSL, subscribe):Observable`
+
+Connect to Signal K server and and open a connection to the STREAM API after performing service endpoint discovery.
+
+This method performs the following:
+
+1. Calls `connect()`
+2. Opens a connection to the discovered Stream endpoint.
+
+*Parameters:*
+
+- *hostname*: host name or ip address
+
+- *port*:     port number
+
+- *useSSL*:   true: uses secure socket protocols *(https / wss)*
+
+- *subscribe*: Signal K subcription request value: 'all', 'self' or 'none'. *(Uses server default if null)*
+
+*Returns*: Observable
+
+*Example:*
+
+```
+// **** Subscribe to Signal K Stream events ***
+
+this.sk.stream.onConnect.subscribe( e=> {
+    ...
+});
+this.sk.stream.onError.subscribe( e=> {
+    ...
+});
+this.sk.stream.onClose.subscribe( e=> {
+    ..
+});
+this.sk.stream.onMessage.subscribe( e=> {
+    ...
+});    
+
+// **** CONNECT to Delta Stream ****
+
+this.sk.connectStream('myServer', 80, false, 'self').subscribe( 
+    r=>{ ... },
+    e=>{ ... } 
+);
+```
 
 ---
 
-`connectStream(hostname, port, useSSL, subscribe):Promise`
+`connectStreamAsPromise(hostname, port, useSSL, subscribe):Promise`
 
-Connect to Signal K server and and open a connection to the STREAM API after performing service endpoint discovery.
+Same as `connectStream()` but returns a Promise.
 
 This method performs the following:
 
@@ -406,16 +507,75 @@ this.sk.connectStream('myServer', 80, false, 'self')
 .then( r=>{ ... } )
 .catch ( e=>{ ... } )
 ```
-
 ---
 
-`connectPlayback(hostname, port, useSSL, options):Promise`
+`connectPlayback(hostname, port, useSSL, options):Observable`
 
 Connect to Signal K server and and open a connection to the PLAYBACK STREAM API after performing service endpoint discovery.
 
 This method performs the following:
 
 1. Calls `connect()`
+2. Calls `openPlayback()`.
+
+*Parameters:*
+
+- *hostname*: host name or ip address
+
+- *port*:     port number
+
+- *useSSL*:   true: uses secure socket protocols *(https / wss)*
+
+- *options*: Signal K Playback options
+```
+{ 
+    startTime: *Date / Time to start playback from.
+    playbackRate: A number defining the rate at which data is sent.
+    subscribe: 'all', 'self' or 'none'. *(Uses server default if null)*
+}
+```
+
+*Returns*: Observable
+
+*Example:*
+
+```
+// **** Subscribe to Signal K Stream events ***
+
+this.sk.stream.onConnect.subscribe( e=> {
+    ...
+});
+this.sk.stream.onError.subscribe( e=> {
+    ...
+});
+this.sk.stream.onClose.subscribe( e=> {
+    ..
+});
+this.sk.stream.onMessage.subscribe( e=> {
+    ...
+});    
+
+// **** CONNECT to Playback Stream ****
+
+this.sk.connectPlayback('myServer', 80, false, {
+    subscribe: 'self',
+    playbackRate: 1,
+    startTime: '2019-01-19T07:14:58Z'
+}).subscribe( 
+    r=>{ ... },
+    e=>{ ... } 
+);
+```
+
+---
+
+`connectPlaybackAsPromise(hostname, port, useSSL, options):Promise`
+
+Same as `connectPlayback()` but returns a Promise.
+
+This method performs the following:
+
+1. Calls `connectAsPromise()`
 2. Calls `openPlayback()`.
 
 *Parameters:*
@@ -734,6 +894,178 @@ this.sk.login( 'myuser', 'mypassword').subscribe(
 
 `logout()`
 
-Log out the current user..
+Log out the current user.
 
+*Returns*: Observable<boolean> true= success, false= failure.
+
+---
+
+`isLoggedIn()`
+
+Log out the current user.
+
+---
+
+### APPLICATION DATA:
+
+Signal K servers with security enabled allow client applications to store data using the `applicationData` API path.
+
+Applications can store data either per user using the `user` path or globally using the `global` path: 
+
+Use the following methods to interact with the `applicationData` API path.
+
+See [SignalK.org](http://signalk.org) for details.
+
+---
+
+`setAppId(appId)`
+
+Set the application id used for all subsequent `applicationData` actions.
+
+This value will be used if `appId` is not supplied to a called method.
+
+*Parameters:*
+
+-*appId*: string value representing the application id.
+
+*Example:*
+
+```
+setAppId('myapp')
+```
+
+---
+
+`setAppVersion(version)`
+
+Set the version used for all subsequent `applicationData` actions.
+
+This value will be used if `version` is not supplied to a called method.
+
+*Parameters:*
+
+-*version*: string value representing the version of the data stored on the server.
+
+*Example:*
+
+```
+setAppVersion('1.1')
+```
+
+---
+
+`appDataVersions(context, appId)`
+
+Return a list of versions under which data is stored for the supplied context.
+
+*Parameters:*
+
+-*context*: `user` or `global`. If not supplied defaults to `user`.
+
+-*appId*: string value representing the application id. If not supplied the value set by `setAppId()` is used.
+
+*Returns*: Observable
+
+*Example:*
+
+```
+appDataVersions('user', 'myapp')
+```
+---
+
+`appDataKeys(path, context, appId, version)`
+
+Return a list of keys stored under the path which data is stored for the supplied context, appId and version.
+
+*Parameters:*
+
+-*path*: pointer to the JSON key.
+
+-*context*: `user` or `global`. If not supplied defaults to `user`.
+
+-*appId*: string value representing the application id. If not supplied the value set by `setAppId()` is used.
+
+-*version*: string value representing the stored data version. If not supplied the value set by `setAppVerison()` is used.
+
+*Returns*: Observable.
+
+*Example:*
+
+```
+appDataKeys('vessel/speed', 'user', 'myapp', '1.0')
+```
+---
+
+`appDataGet(path, context, appId, version)`
+
+Return the value stored at the supplied path for the supplied context, appId and version.
+
+*Parameters:*
+
+-*path*: pointer to the JSON key.
+
+-*context*: `user` or `global`. If not supplied defaults to `user`.
+
+-*appId*: string value representing the application id. If not supplied the value set by `setAppId()` is used.
+
+-*version*: string value representing the stored data version. If not supplied the value set by `setAppVerison()` is used.
+
+*Returns*: Observable.
+
+*Example:*
+
+```
+appDataGet('vessel/speed', 'user', 'myapp', '1.0')
+```
+---
+
+`appDataSet(path, value, context, appId, version)`
+
+Store a value at the supplied path for the supplied context, appId and version.
+
+*Parameters:*
+
+-*path*: pointer to the JSON key under which to store the data.
+
+-*value*: value to store.
+
+-*context*: `user` or `global`. If not supplied defaults to `user`.
+
+-*appId*: string value representing the application id. If not supplied the value set by `setAppId()` is used.
+
+-*version*: string value representing the stored data version. If not supplied the value set by `setAppVerison()` is used.
+
+
+*Example:*
+
+```
+appDataSet('vessel/speed/sog', 1.5, 'user', 'myapp', '1.0')
+```
+---
+
+`appDataPatch(value, context, appId, version)`
+
+Add / Update / Remove multiple values at the supplied path for the supplied context, appId and version.
+
+*Parameters:*
+
+-*value*: Array of JSON Patch formatted objects representing the actions and values.
+
+-*context*: `user` or `global`. If not supplied defaults to `user`.
+
+-*appId*: string value representing the application id. If not supplied the value set by `setAppId()` is used.
+
+-*version*: string value representing the stored data version. If not supplied the value set by `setAppVerison()` is used.
+
+
+*Example:*
+
+```
+appDataPatch(
+    [
+        {"op":"add", "path": "/vessel/speed", "value": {sog: 1.25} },
+        {"op":"remove", "path": "/vessel/speed/stw" }
+    ], 
+    'user', 'myapp', '1.0')
+```
 ---

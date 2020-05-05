@@ -1,5 +1,27 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.7.0
+
+- Add support for storing client data on the server via the `applicationData` path.
+
+- Add `isLoggedin()` method to query if a user is authenticated on the server.
+
+__Breaking Changes__:
+
+The following methods now return an `Observable` rather than a `Promise`.
+
+- `connect()`
+- `connectStream()`
+- `connectPlayback()`
+
+To continue using `Promise`s update your code to use the following methods:
+
+- `connectAsPromise()`
+- `connectStreamAsPromise()`
+- `connectPlaybackAsPromise()`
+
+---
+
 ### v1.6.0
 
 - __Removed__ `worker` object. Use `signalk-worker-angular` to interact with Signal K stream via a web worker.

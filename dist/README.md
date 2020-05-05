@@ -19,6 +19,22 @@ npm i signalk-worker-angular
 
 ---
 
+### Breaking Changes:
+
+From the release of __version 1.7.0__ the following methods now return an `Observable`.
+
+- `connect()`
+- `connectStream()`
+- `connectPlayback()`
+
+To continue using `Promise`s update your code to use the following methods:
+
+- `connectAsPromise()`
+- `connectStreamAsPromise()`
+- `connectPlaybackAsPromise()`
+
+---
+
 See below for some [Examples](#usage) below to see how to use this library..
 
 

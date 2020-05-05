@@ -1490,15 +1490,32 @@ if (false) {
 /**
  * @record
  */
-function IServer_Info() { }
+function Server_Info() { }
 if (false) {
     /** @type {?} */
-    IServer_Info.prototype.endpoints;
+    Server_Info.prototype.endpoints;
     /** @type {?} */
-    IServer_Info.prototype.info;
+    Server_Info.prototype.info;
     /** @type {?} */
-    IServer_Info.prototype.apiVersions;
+    Server_Info.prototype.apiVersions;
 }
+/**
+ * @record
+ */
+function JSON_Patch() { }
+if (false) {
+    /** @type {?} */
+    JSON_Patch.prototype.op;
+    /** @type {?} */
+    JSON_Patch.prototype.path;
+    /** @type {?} */
+    JSON_Patch.prototype.value;
+}
+/** @enum {string} */
+var APPDATA_CONTEXT = {
+    USER: 'user',
+    GLOBAL: 'global',
+};
 var SignalKClient = /** @class */ (function () {
     // *******************************************************
     function SignalKClient(http, apps, api, stream) {
@@ -1512,7 +1529,7 @@ var SignalKClient = /** @class */ (function () {
             endpoints: { v1: {} },
             server: { id: "fallback" }
         };
-        // **************** ATTRIBUTES ***************************
+        // **************** ATTRIBUTES ***************************  
         // ** server information block **
         this.server = {
             endpoints: {},
@@ -1681,7 +1698,7 @@ var SignalKClient = /** @class */ (function () {
      * @param {?=} useSSL
      * @return {?}
      */
-    SignalKClient.prototype.connect = 
+    SignalKClient.prototype.connectAsPromise = 
     // ** connect to server (endpoint discovery) and DO NOT open Stream
     /**
      * @param {?=} hostname
@@ -1709,6 +1726,11 @@ var SignalKClient = /** @class */ (function () {
              */
             function (// ** discover endpoints **
             response) {
+                _this.getLoginStatus().subscribe((/**
+                 * @param {?} r
+                 * @return {?}
+                 */
+                function (r) { }));
                 if (_this.stream) {
                     _this.stream.close();
                 }
@@ -1737,6 +1759,71 @@ var SignalKClient = /** @class */ (function () {
             }));
         }));
     };
+    // ** connect to server (endpoint discovery) and DO NOT open Stream
+    // ** connect to server (endpoint discovery) and DO NOT open Stream
+    /**
+     * @param {?=} hostname
+     * @param {?=} port
+     * @param {?=} useSSL
+     * @return {?}
+     */
+    SignalKClient.prototype.connect = 
+    // ** connect to server (endpoint discovery) and DO NOT open Stream
+    /**
+     * @param {?=} hostname
+     * @param {?=} port
+     * @param {?=} useSSL
+     * @return {?}
+     */
+    function (hostname, port, useSSL) {
+        var _this = this;
+        if (hostname === void 0) { hostname = null; }
+        if (port === void 0) { port = null; }
+        if (useSSL === void 0) { useSSL = false; }
+        /** @type {?} */
+        var sub = new Subject();
+        this.debug('Contacting Signal K server.........');
+        this.hello(hostname, port, useSSL).subscribe((
+        // ** discover endpoints **
+        /**
+         * @param {?} response
+         * @return {?}
+         */
+        function (// ** discover endpoints **
+        response) {
+            _this.getLoginStatus().subscribe((/**
+             * @param {?} r
+             * @return {?}
+             */
+            function (r) { }));
+            if (_this.stream) {
+                _this.stream.close();
+            }
+            _this.processHello(response);
+            _this.api.endpoint = _this.resolveHttpEndpoint();
+            _this.stream.endpoint = _this.resolveStreamEndpoint();
+            sub.next(true);
+        }), (/**
+         * @param {?} error
+         * @return {?}
+         */
+        function (error) {
+            if (_this.fallback) { // fallback if no hello response
+                if (_this.stream) {
+                    _this.stream.close();
+                }
+                _this.processHello(null);
+                _this.api.endpoint = _this.resolveHttpEndpoint();
+                _this.stream.endpoint = _this.resolveStreamEndpoint();
+                sub.next(true);
+            }
+            else {
+                _this.disconnectedFromServer();
+                sub.error(error);
+            }
+        }));
+        return sub.asObservable();
+    };
     // ** disconnect from server
     // ** disconnect from server
     /**
@@ -1748,6 +1835,58 @@ var SignalKClient = /** @class */ (function () {
      * @return {?}
      */
     function () { this.stream.close(); };
+    // ** Connect + open Delta Stream (endpoint discovery)
+    // ** Connect + open Delta Stream (endpoint discovery)
+    /**
+     * @param {?=} hostname
+     * @param {?=} port
+     * @param {?=} useSSL
+     * @param {?=} subscribe
+     * @return {?}
+     */
+    SignalKClient.prototype.connectStreamAsPromise = 
+    // ** Connect + open Delta Stream (endpoint discovery)
+    /**
+     * @param {?=} hostname
+     * @param {?=} port
+     * @param {?=} useSSL
+     * @param {?=} subscribe
+     * @return {?}
+     */
+    function (hostname, port, useSSL, subscribe) {
+        var _this = this;
+        if (hostname === void 0) { hostname = null; }
+        if (port === void 0) { port = null; }
+        if (useSSL === void 0) { useSSL = false; }
+        if (subscribe === void 0) { subscribe = null; }
+        return new Promise((/**
+         * @param {?} resolve
+         * @param {?} reject
+         * @return {?}
+         */
+        function (resolve, reject) {
+            _this.connectAsPromise(hostname, port, useSSL)
+                .then((/**
+             * @return {?}
+             */
+            function () {
+                // ** connect to stream api at preferred version else fall back to default version
+                /** @type {?} */
+                var url = _this.resolveStreamEndpoint();
+                if (!url) {
+                    reject(new Error('Server has no advertised Stream endpoints!'));
+                    return;
+                }
+                _this.stream.open(url, subscribe);
+                resolve(true);
+            }))
+                .catch((/**
+             * @param {?} e
+             * @return {?}
+             */
+            function (e) { reject(e); }));
+        }));
+    };
     // ** Connect + open Delta Stream (endpoint discovery)
     // ** Connect + open Delta Stream (endpoint discovery)
     /**
@@ -1772,25 +1911,64 @@ var SignalKClient = /** @class */ (function () {
         if (port === void 0) { port = null; }
         if (useSSL === void 0) { useSSL = false; }
         if (subscribe === void 0) { subscribe = null; }
+        /** @type {?} */
+        var sub = new Subject();
+        this.connect(hostname, port, useSSL).subscribe((/**
+         * @return {?}
+         */
+        function () {
+            // ** connect to stream api at preferred version else fall back to default version
+            /** @type {?} */
+            var url = _this.resolveStreamEndpoint();
+            if (!url) {
+                sub.error(new Error('Server has no advertised Stream endpoints!'));
+                return;
+            }
+            _this.stream.open(url, subscribe);
+            sub.next(true);
+        }), (/**
+         * @param {?} e
+         * @return {?}
+         */
+        function (e) { sub.error(e); }));
+        return sub.asObservable();
+    };
+    // ** connect to playback stream (endpoint discovery)
+    // ** connect to playback stream (endpoint discovery)
+    /**
+     * @param {?=} hostname
+     * @param {?=} port
+     * @param {?=} useSSL
+     * @param {?=} options
+     * @return {?}
+     */
+    SignalKClient.prototype.connectPlaybackAsPromise = 
+    // ** connect to playback stream (endpoint discovery)
+    /**
+     * @param {?=} hostname
+     * @param {?=} port
+     * @param {?=} useSSL
+     * @param {?=} options
+     * @return {?}
+     */
+    function (hostname, port, useSSL, options) {
+        var _this = this;
+        if (hostname === void 0) { hostname = null; }
+        if (port === void 0) { port = null; }
+        if (useSSL === void 0) { useSSL = false; }
         return new Promise((/**
          * @param {?} resolve
          * @param {?} reject
          * @return {?}
          */
         function (resolve, reject) {
-            _this.connect(hostname, port, useSSL)
+            _this.connectAsPromise(hostname, port, useSSL)
                 .then((/**
              * @return {?}
              */
             function () {
-                // ** connect to stream api at preferred version else fall back to default version
-                /** @type {?} */
-                var url = _this.resolveStreamEndpoint();
-                if (!url) {
-                    reject(new Error('Server has no advertised Stream endpoints!'));
-                    return;
-                }
-                _this.stream.open(url, subscribe);
+                // ** connect to playback api at preferred version else fall back to default version
+                _this.openPlayback(null, options, _this._token);
                 resolve(true);
             }))
                 .catch((/**
@@ -1823,27 +2001,21 @@ var SignalKClient = /** @class */ (function () {
         if (hostname === void 0) { hostname = null; }
         if (port === void 0) { port = null; }
         if (useSSL === void 0) { useSSL = false; }
-        return new Promise((/**
-         * @param {?} resolve
-         * @param {?} reject
+        /** @type {?} */
+        var sub = new Subject();
+        this.connect(hostname, port, useSSL).subscribe((/**
          * @return {?}
          */
-        function (resolve, reject) {
-            _this.connect(hostname, port, useSSL)
-                .then((/**
-             * @return {?}
-             */
-            function () {
-                // ** connect to playback api at preferred version else fall back to default version
-                _this.openPlayback(null, options, _this._token);
-                resolve(true);
-            }))
-                .catch((/**
-             * @param {?} e
-             * @return {?}
-             */
-            function (e) { reject(e); }));
-        }));
+        function () {
+            // ** connect to playback api at preferred version else fall back to default version
+            _this.openPlayback(null, options, _this._token);
+            sub.next(true);
+        }), (/**
+         * @param {?} e
+         * @return {?}
+         */
+        function (e) { sub.error(e); }));
+        return sub.asObservable();
     };
     // ** connect to delta stream with (NO endpoint discovery)
     // ** connect to delta stream with (NO endpoint discovery)
@@ -2043,8 +2215,11 @@ var SignalKClient = /** @class */ (function () {
      * @return {?}
      */
     function (path) {
+        if (path && path.length > 0 && path[0] == '/') {
+            path = path.slice(1);
+        }
         /** @type {?} */
-        var url = this.protocol + "://" + this.hostname + ":" + this.port + Path.dotToSlash(path);
+        var url = this.protocol + "://" + this.hostname + ":" + this.port + "/" + Path.dotToSlash(path);
         this.debug("get " + url);
         if (this._token) {
             /** @type {?} */
@@ -2072,12 +2247,12 @@ var SignalKClient = /** @class */ (function () {
      */
     function (path, value) {
         /** @type {?} */
-        var url = this.protocol + "://" + this.hostname + ":" + this.port + Path.dotToSlash(path);
+        var url = this.protocol + "://" + this.hostname + ":" + this.port + "/" + Path.dotToSlash(path);
         this.debug("put " + url);
         if (this._token) {
             /** @type {?} */
             var headers = new HttpHeaders({ 'Authorization': "JWT " + this._token });
-            return this.http.put(url, { headers: headers });
+            return this.http.put(url, value, { headers: headers });
         }
         else {
             return this.http.put(url, value);
@@ -2099,13 +2274,16 @@ var SignalKClient = /** @class */ (function () {
      * @return {?}
      */
     function (path, value) {
+        if (path && path.length > 0 && path[0] == '/') {
+            path = path.slice(1);
+        }
         /** @type {?} */
-        var url = this.protocol + "://" + this.hostname + ":" + this.port + Path.dotToSlash(path);
+        var url = this.protocol + "://" + this.hostname + ":" + this.port + "/" + Path.dotToSlash(path);
         this.debug("post " + url);
         if (this._token) {
             /** @type {?} */
             var headers = new HttpHeaders({ 'Authorization': "JWT " + this._token });
-            return this.http.post(url, { headers: headers });
+            return this.http.post(url, value, { headers: headers });
         }
         else {
             return this.http.post(url, value);
@@ -2143,16 +2321,66 @@ var SignalKClient = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
+        var sub = new Subject();
+        ;
+        /** @type {?} */
         var url = this.protocol + "://" + this.hostname + ":" + this.port + "/signalk/" + this._version + "/auth/logout";
         if (this._token) {
             /** @type {?} */
             var headers = new HttpHeaders({ 'Authorization': "JWT " + this._token });
-            return this.http.put(url, null, { headers: headers });
+            this.http.put(url, null, { headers: headers, responseType: 'text' }).subscribe((/**
+             * @return {?}
+             */
+            function () { sub.next(true); }), (/**
+             * @return {?}
+             */
+            function () { sub.next(false); }));
         }
         else {
-            return this.http.put(url, null);
+            this.http.put(url, null, { responseType: 'text' }).subscribe((/**
+             * @return {?}
+             */
+            function () { sub.next(true); }), (/**
+             * @return {?}
+             */
+            function () { sub.next(false); }));
         }
+        return sub.asObservable();
     };
+    // ** is a user authenticated to the server **
+    // ** is a user authenticated to the server **
+    /**
+     * @return {?}
+     */
+    SignalKClient.prototype.isLoggedIn = 
+    // ** is a user authenticated to the server **
+    /**
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var sub = new Subject();
+        this.getLoginStatus().subscribe((/**
+         * @param {?} r
+         * @return {?}
+         */
+        function (r) { sub.next(r.status == 'loggedIn' ? true : false); }), (/**
+         * @return {?}
+         */
+        function () { sub.next(false); }));
+        return sub.asObservable();
+    };
+    // ** fetch login status from server **
+    // ** fetch login status from server **
+    /**
+     * @return {?}
+     */
+    SignalKClient.prototype.getLoginStatus = 
+    // ** fetch login status from server **
+    /**
+     * @return {?}
+     */
+    function () { return this.get('/loginstatus'); };
     //** get data via the snapshot http api path for supplied time
     //** get data via the snapshot http api path for supplied time
     /**
@@ -2185,6 +2413,228 @@ var SignalKClient = /** @class */ (function () {
         }
         else {
             return this.http.get(url);
+        }
+    };
+    /**
+     * @private
+     * @param {?} context
+     * @param {?} appId
+     * @return {?}
+     */
+    SignalKClient.prototype.resolveAppDataEndpoint = /**
+     * @private
+     * @param {?} context
+     * @param {?} appId
+     * @return {?}
+     */
+    function (context, appId) {
+        if (!context || !appId) {
+            return null;
+        }
+        /** @type {?} */
+        var url = this.resolveHttpEndpoint().replace('api', 'applicationData');
+        return "" + url + context + "/" + appId + "/";
+    };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    SignalKClient.prototype.setAppId = /**
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) { this._appId = value; };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    SignalKClient.prototype.setAppVersion = /**
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) { this._appVersion = value; };
+    // ** get list of available versions of data stored **
+    // ** get list of available versions of data stored **
+    /**
+     * @param {?=} context
+     * @param {?=} appId
+     * @return {?}
+     */
+    SignalKClient.prototype.appDataVersions = 
+    // ** get list of available versions of data stored **
+    /**
+     * @param {?=} context
+     * @param {?=} appId
+     * @return {?}
+     */
+    function (context, appId) {
+        if (context === void 0) { context = APPDATA_CONTEXT.USER; }
+        if (appId === void 0) { appId = this._appId; }
+        /** @type {?} */
+        var url = this.resolveAppDataEndpoint(context, appId);
+        if (this._token) {
+            /** @type {?} */
+            var headers = new HttpHeaders({ 'Authorization': "JWT " + this._token });
+            return this.http.get(url, { headers: headers });
+        }
+        else {
+            return this.http.get(url);
+        }
+    };
+    // ** get list of available keys for a stored path **
+    // ** get list of available keys for a stored path **
+    /**
+     * @param {?=} path
+     * @param {?=} context
+     * @param {?=} appId
+     * @param {?=} version
+     * @return {?}
+     */
+    SignalKClient.prototype.appDataKeys = 
+    // ** get list of available keys for a stored path **
+    /**
+     * @param {?=} path
+     * @param {?=} context
+     * @param {?=} appId
+     * @param {?=} version
+     * @return {?}
+     */
+    function (path, context, appId, version) {
+        if (path === void 0) { path = ''; }
+        if (context === void 0) { context = APPDATA_CONTEXT.USER; }
+        if (appId === void 0) { appId = this._appId; }
+        if (version === void 0) { version = this._appVersion; }
+        path = (path.length != 0 && path[0] == '/') ? path.slice(1) : path;
+        /** @type {?} */
+        var url = this.resolveAppDataEndpoint(context, appId);
+        url += version + "/" + path + "?keys=true";
+        if (this._token) {
+            /** @type {?} */
+            var headers = new HttpHeaders({ 'Authorization': "JWT " + this._token });
+            return this.http.get(url, { headers: headers });
+        }
+        else {
+            return this.http.get(url);
+        }
+    };
+    // ** get stored value at provided path **
+    // ** get stored value at provided path **
+    /**
+     * @param {?=} path
+     * @param {?=} context
+     * @param {?=} appId
+     * @param {?=} version
+     * @return {?}
+     */
+    SignalKClient.prototype.appDataGet = 
+    // ** get stored value at provided path **
+    /**
+     * @param {?=} path
+     * @param {?=} context
+     * @param {?=} appId
+     * @param {?=} version
+     * @return {?}
+     */
+    function (path, context, appId, version) {
+        if (path === void 0) { path = ''; }
+        if (context === void 0) { context = APPDATA_CONTEXT.USER; }
+        if (appId === void 0) { appId = this._appId; }
+        if (version === void 0) { version = this._appVersion; }
+        path = (path.length != 0 && path[0] == '/') ? path.slice(1) : path;
+        /** @type {?} */
+        var url = this.resolveAppDataEndpoint(context, appId);
+        url += version + "/" + path;
+        if (this._token) {
+            /** @type {?} */
+            var headers = new HttpHeaders({ 'Authorization': "JWT " + this._token });
+            return this.http.get(url, { headers: headers });
+        }
+        else {
+            return this.http.get(url);
+        }
+    };
+    // ** set stored value at provided path **
+    // ** set stored value at provided path **
+    /**
+     * @param {?} path
+     * @param {?} value
+     * @param {?=} context
+     * @param {?=} appId
+     * @param {?=} version
+     * @return {?}
+     */
+    SignalKClient.prototype.appDataSet = 
+    // ** set stored value at provided path **
+    /**
+     * @param {?} path
+     * @param {?} value
+     * @param {?=} context
+     * @param {?=} appId
+     * @param {?=} version
+     * @return {?}
+     */
+    function (path, value, context, appId, version) {
+        if (context === void 0) { context = APPDATA_CONTEXT.USER; }
+        if (appId === void 0) { appId = this._appId; }
+        if (version === void 0) { version = this._appVersion; }
+        if (!path) {
+            return;
+        }
+        if (path[0] == '/') {
+            path = path.slice(1);
+        }
+        /** @type {?} */
+        var ep = this.resolveAppDataEndpoint(context, appId);
+        if (!ep) {
+            return;
+        }
+        /** @type {?} */
+        var url = "" + ep + version + "/" + Path.dotToSlash(path);
+        if (this._token) {
+            /** @type {?} */
+            var headers = new HttpHeaders({ 'Authorization': "JWT " + this._token });
+            return this.http.post(url, value, { headers: headers });
+        }
+        else {
+            return this.http.post(url, value);
+        }
+    };
+    // ** update / patch stored values using Array of JSON patch objects **
+    // ** update / patch stored values using Array of JSON patch objects **
+    /**
+     * @param {?} value
+     * @param {?=} context
+     * @param {?=} appId
+     * @param {?=} version
+     * @return {?}
+     */
+    SignalKClient.prototype.appDataPatch = 
+    // ** update / patch stored values using Array of JSON patch objects **
+    /**
+     * @param {?} value
+     * @param {?=} context
+     * @param {?=} appId
+     * @param {?=} version
+     * @return {?}
+     */
+    function (value, context, appId, version) {
+        if (context === void 0) { context = APPDATA_CONTEXT.USER; }
+        if (appId === void 0) { appId = this._appId; }
+        if (version === void 0) { version = this._appVersion; }
+        /** @type {?} */
+        var ep = this.resolveAppDataEndpoint(context, appId);
+        if (!ep || !version) {
+            return;
+        }
+        /** @type {?} */
+        var url = "" + ep + version;
+        if (this._token) {
+            /** @type {?} */
+            var headers = new HttpHeaders({ 'Authorization': "JWT " + this._token });
+            return this.http.post(url, value, { headers: headers });
+        }
+        else {
+            return this.http.post(url, value);
         }
     };
     SignalKClient.decorators = [
@@ -2236,6 +2686,21 @@ if (false) {
     /** @type {?} */
     SignalKClient.prototype.fallback;
     /**
+     * ****************************
+     *  applicationData api methods
+     * context: 'user' or 'global'
+     * appId: application id string
+     * *****************************
+     * @type {?}
+     * @private
+     */
+    SignalKClient.prototype._appId;
+    /**
+     * @type {?}
+     * @private
+     */
+    SignalKClient.prototype._appVersion;
+    /**
      * @type {?}
      * @private
      */
@@ -2280,5 +2745,5 @@ var SignalKClientModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { Alarm, AlarmMethod, AlarmState, AlarmType, Message, Path, SignalKApps, SignalKClient, SignalKClientModule, SignalKHttp, SignalKStream, UUID as ɵa };
+export { APPDATA_CONTEXT, Alarm, AlarmMethod, AlarmState, AlarmType, Message, Path, SignalKApps, SignalKClient, SignalKClientModule, SignalKHttp, SignalKStream, UUID as ɵa };
 //# sourceMappingURL=signalk-client-angular.js.map
