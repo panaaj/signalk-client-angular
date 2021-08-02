@@ -20,6 +20,8 @@ Please see the [**Usage**](#usage) section below for guidance on how to use the 
 
 ### Breaking Changes:
 
+Note: `version 1.8` is packaged using Angular 12 and `strict` mode. This may cause issues with projects using older versions of Angular.
+
 As of `version 1.7` the following methods return an `Observable` rather than a `Promise`.
 
 - `connect()`
