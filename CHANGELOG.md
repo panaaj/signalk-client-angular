@@ -1,5 +1,13 @@
 # CHANGELOG: signalk-client-angular
 
+### v1.8.0
+
+- Updated to Angular 12.
+
+- Added API `raiseAlarm()` and `clearAlarm()` methods.
+
+- Updated STREAM `raiseAlarm()` and `clearAlarm()` methods to use PUT.
+
 ### v1.7.0
 
 - Add support for storing client data on the server via the `applicationData` path.
