@@ -20,7 +20,11 @@ Please see the [**Usage**](#usage) section below for guidance on how to use the 
 
 ### Breaking Changes:
 
-Note: `version 1.8` is packaged using Angular 12 and `strict` mode. This may cause issues with projects using older versions of Angular.
+Note: `version 1.8` is built using Angular 12 in `partial-Ivy` mode. 
+This means that means projects using:
+- the `View Engine`
+- versions of Angular prior to v9
+need to ensure that `"enableIvy": false` is set in the `tsconfig.json` file.
 
 As of `version 1.7` the following methods return an `Observable` rather than a `Promise`.
 
