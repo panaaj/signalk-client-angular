@@ -215,6 +215,7 @@ SignalKClient contains the following classes to interact with Signal K API's:
 - `version`
 - `authToken`
 - `uuid`
+- `proxied`
 
 [Methods](#methods)
 - `hello()`
@@ -247,7 +248,7 @@ SignalKClient contains the following classes to interact with Signal K API's:
 `server`: 
 
 Information returned from Signal K server *hello* response.
-```
+```javascript
 {
     endpoints: {},
     info: {},
@@ -266,7 +267,7 @@ Get / Set preferred Signal K API version to use when the server supports more th
 
 *Example:*
 
-```
+```javascript
     // ** set target version **
     this.sk.version=2;
 
@@ -285,7 +286,7 @@ A token string to be used for authentication when interacting with the Signal K 
 Use the `login()` method to authenticate to the server and retrieve a token for the specified user.
 
 *Example:*
-```
+```javascript
 this.sk.authToken= '<auth_token_string>';
 ```
 
@@ -302,7 +303,7 @@ Provides a convenient way to generate a v4 UUID object which has two methods:
 - `toSignalK()`: Returns a formatted Signal K resource identifier
 
 *Example:*
-```
+```javascript
 let uuid= this.sk.uuid;
 
 uuid.toString();  
@@ -315,7 +316,56 @@ uuid.toSignalK();
 
 ```
 
-_Note: A new UUID is generated everytime `uuid` is used!_ 
+---
+
+`proxied`:
+
+Boolean value to indicate whether the Signal K server that is being connected to is behind a proxy server.
+
+- `false` (default): Uses endpoints received in the `hello()` response.
+
+- `true`: Replaces protocol, host & port values of endpoint values received in the `hello()` response with those from connection.
+
+*Example: `proxied = false` (default)*
+```javascript
+proxied = false;
+
+// Signal K server url: http://myServer.org:3000
+connect('myServer.org');
+
+hello response = {
+    ...
+    endpoints: {
+        "signalk-http":"http://myServer.org:3000/signalk/v1/api/",
+        "signalk-ws":"ws://myServer.org:3000/signalk/v1/stream"
+    }
+} 
+
+// endpoints used are those received in hello response.
+```
+
+*Example: `proxied = true`*
+```javascript
+proxied = true;
+
+// Proxied Signal K server url: https://myServer.org:3100
+connect('myServer.org', 3100, true);
+
+hello response = {
+    ...
+    endpoints: {
+        "signalk-http":"http://myServer.org:3000/signalk/v1/api/",
+        "signalk-ws":"ws://myServer.org:3000/signalk/v1/stream"
+    }
+} 
+
+// received endpoint values are modified to include the proxy url values.
+endpoints: {
+    "signalk-http":"https://myServer.org:3100/signalk/v1/api/",
+    "signalk-ws":"wss://myServer.org:3100/signalk/v1/stream"
+}
+```
+
 
 ---
 
