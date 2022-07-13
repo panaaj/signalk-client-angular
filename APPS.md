@@ -25,7 +25,7 @@ i.e. /signalk/v1/apps
 
 Returns the list of applications installed on the Signal K server.
 
-```
+```javascript
 this.sk.apps.list().subscribe( 
     appsList=> {
         appsList.forEach( app=> {

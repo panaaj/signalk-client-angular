@@ -58,19 +58,19 @@ The `stream` object provides methods to facilitate interaction with the Signal K
 ### Attributes
 
 
-`isOpen`
+`isOpen: boolean`
 
 Returns true if WebSocket connection is established.
 
 ---
 
-`playbackMode`
+`playbackMode: boolean`
 
 Returns true if stream is a history playback data stream.
 
 ---
 
-`connectionTimeout`
+`connectionTimeout: number`
 
 Set stream connection timeout value in milliseconds. default=20000 (20 sec).
 
@@ -82,13 +82,13 @@ If a connection has not been established within the specified time period the co
 *Valid value range is 3000 to 60000 milliseconds (3 to 60 sec).*
 
 *Example:*
-```
-    this.sk.stream.connectionTimeout= 10000;
+```javascript
+this.sk.stream.connectionTimeout= 10000;
 
-    this.sk.stream.connect( ... );
+this.sk.stream.connect( ... );
 ```
 ---
-`filter`
+`filter: string`
 
 Use the filter attribute to only include messages with the context of the supplied `uuid`.
 
@@ -98,7 +98,7 @@ Use the filter attribute to only include messages with the context of the suppli
 
 *Examples:*
 
-```
+```javascript
 // **** see only delta messages from 'self' ****
 this.sk.stream.filter= 'self';
 this.sk.stream.filter 'vessels.self';
@@ -111,18 +111,18 @@ this.sk.stream.filter= null;
 ```
 ---
 
-`selfId`
+`selfId: string`
 
 Value of the Self identity returned in the WebSocket `hello` message.
 
 ---
 
-`source`
+`source: string`
 
 Source label value to be used in messages sent to the Signal K server.
 
 _Example:_
-```
+```javascript
 this.sk.stream.source= 'my-app-name';
 
 this.sk.stream.sendUpdate(....);
@@ -141,14 +141,14 @@ this.sk.stream.sendUpdate(....);
 ```
 ---
 
-`authToken`:
+`authToken: string`:
 
 A token string to be used for authentication when interacting with the Signal K server.
 
 Use the `login()` method to authenticate to the server and retrieve a token for the specified user.
 
 *Example:*
-```
+```javascript
 this.sk.stream.authToken= '<auth_token_string>';
 ```
 
@@ -172,7 +172,7 @@ Subscribe to these events to interact with the Signal K delta stream.
 
 *Example:*
 
-```
+```javascript
 this.sk.stream.onConnect.subscribe( e=> {
     ...
 });
@@ -204,7 +204,7 @@ Opens Signal K server DELTA stream.
 
 *Returns*: true or Error().  Subscribe to `SignalKClient.stream` events to receive results of actions.
 
-```
+```javascript
 // **** Subscribe to Signal K Stream events ***
 
 this.sk.stream.onConnect.subscribe( e=> {
@@ -251,12 +251,11 @@ _Note: The `stream` object will process the login response message and retain th
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.streamOpen(...);
 
 let id= this.sk.stream.login("myuser", "myUserPassword");
-
 ```
 ---
 
@@ -276,14 +275,13 @@ Put value to Signal K path via the Signal K server STREAM API.
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
 ...
 // **** send update to STREAM API ****
 let id= this.sk.stream.put("vessels.self", "steering.autopilot.target.headingTrue", 1.52);
-
 ```
 ---
 
@@ -307,7 +305,7 @@ This method will also detect and include an authentication token from prevous `l
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.streamOpen(...);
 
@@ -317,8 +315,8 @@ this.sk.stream.sendRequest( {
     key1: 'Key1 data.',
     key2: 'Key2 data.'
 });
-
 ```
+
 ---
 
 `sendUpdate(context, path, value)`
@@ -337,7 +335,7 @@ Send delta update via the Signal K server STREAM API.
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -364,7 +362,7 @@ Send data to the Signal K server STREAM API.
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -396,9 +394,9 @@ specify which updates to recieve in the delta stream.
 - *path*: path to Signal K resource *(dotted notation)*. Can also be an array of valid Signal K subscription objects. 
 
 - *options (optional)*: Object containing one or more of the following subscription options.
-```
+```javascript
 {
-    Period: in milliseconds in between transmission (default: 1000),
+    period: Time in milliseconds in between transmission (default: 1000),
     format: Transmission format 'delta' or 'full' (default: 'delta'),    
     policy: 'instant', 'ideal', 'fixed' (default: 'ideal'),
     minPeriod: Fastest transmission rate allowed. (relates only to policy= 'instant')
@@ -406,7 +404,7 @@ specify which updates to recieve in the delta stream.
 ```
 *Example:*
 
-```
+```javascript
 // **** subscribe using defaults ****
 this.sk.stream.subscribe('self','navigation.courseOverGroundTrue');
 
@@ -435,11 +433,11 @@ Unubscribe from specific Signal K paths so data for the specified path(s) are no
 - *path*: path to Signal K resource *(dotted notation)*. Can also be an array of valid Signal K paths. 
 
 *Examples:*
-```
+```javascript
 // **** unsubscribe from specific updates ****
 this.sk.stream.unsubscribe('self','navigation.courseOverGroundTrue');
 
-this.sk.stream.unsubscribe('self, [
+this.sk.stream.unsubscribe('self', [
     'navigation.courseOverGroundTrue',
     'navigation.speedOverGround'
 ]);
@@ -447,6 +445,7 @@ this.sk.stream.unsubscribe('self, [
 // **** unsubscribe from all updates ****
 this.sk.stream.unsubscribe();    
 ```
+
 ---
 
 `raiseAlarm(context, name, alarm)`
@@ -462,7 +461,7 @@ Send stream update to raise an alarm of the supplied name.
 - *alarm*: An `Alarm` object _(see Alarm below)_
 
 *Examples:*
-```
+```javascript
 this.sk.stream.raiseAlarm('self','Anchor', new Alarm(
     'Anchor dragging!',
     AlarmState.alarm,
@@ -477,6 +476,7 @@ this.sk.stream.raiseAlarm('self',AlarmType.sinking, new Alarm(
     true, true )
 );   
 ```
+
 ---
 
 `clearAlarm(context, name)`
@@ -490,9 +490,10 @@ Send stream update to clear the alarm of the supplied name.
 - *name*: Alarm name e.g.MOB, Anchor. 
 
 *Examples:*
-```
+```javascript
 this.sk.stream.clearAlarm('self','MOB');   
 ```
+
 ---
 
 `isDelta(msg)`
@@ -507,16 +508,17 @@ Returns true if supplied message is a delta message containing updates.
 
 *Example:*
 
-```
-    // ** connect to server **
-    this.sk.connect(...);
+```javascript
+// ** connect to server **
+this.sk.connect(...);
 
-    ...
+...
 
-    this.sk.onMessage.subscribe( e=> {
-        if( this.sk.stream.isDelta(e) ) { ... }
-    });    
+this.sk.onMessage.subscribe( e=> {
+    if( this.sk.stream.isDelta(e) ) { ... }
+});    
 ```
+
 ---
 
 `isHello(msg)`
@@ -531,16 +533,17 @@ Returns true if supplied message is a Signal K server `hello` message.
 
 *Example:*
 
-```
-    // ** connect to server **
-    this.sk.connect(...);
+```javascript
+// ** connect to server **
+this.sk.connect(...);
 
-    ...
+...
 
-    this.sk.onMessage.subscribe( e=> {
-        if( this.sk.stream.isHello(e) ) { ... }
-    });    
+this.sk.onMessage.subscribe( e=> {
+    if( this.sk.stream.isHello(e) ) { ... }
+});    
 ```
+
 ---
 
 `isResponse(msg)`
@@ -555,16 +558,17 @@ Returns true if supplied message is a Stream Request `response` message.
 
 *Example:*
 
-```
-    // ** connect to server **
-    this.sk.connect(...);
+```javascript
+// ** connect to server **
+this.sk.connect(...);
 
-    ...
+...
 
-    this.sk.onMessage.subscribe( e=> {
-        if( this.sk.stream.isResponse(e) ) { ... }
-    });    
+this.sk.onMessage.subscribe( e=> {
+    if( this.sk.stream.isResponse(e) ) { ... }
+});    
 ```
+
 ---
 
 `isSelf(msg)`
@@ -579,16 +583,17 @@ Returns true if supplied message context is for the `self` identity.
 
 *Example:*
 
-```
-    // ** connect to server **
-    this.sk.connect(...);
+```javascript
+// ** connect to server **
+this.sk.connect(...);
 
-    ...
+...
 
-    this.sk.onMessage.subscribe( e=> {
-        if( this.sk.stream.isSelf(e) ) { ... }
-    });    
+this.sk.onMessage.subscribe( e=> {
+    if( this.sk.stream.isSelf(e) ) { ... }
+});    
 ```
+
 ---
 
 ### Alarms
@@ -612,14 +617,14 @@ Attribute that returns a formatted value for use with `raiseAlarm()` method.
 
 *Example:*
 
-```
-    let al= new Alarm(
-        'Anchor drag alarm!;,
-        AlarmState.alarm,
-        true, true
-    ) 
+```javascript
+let al= new Alarm(
+    'Anchor drag alarm!',
+    AlarmState.alarm,
+    true, true
+) 
 
-    this.sk.stream.raiseAlarm('self', 'Anchor', al);
+this.sk.stream.raiseAlarm('self', 'Anchor', al);
 ```
 
 ---

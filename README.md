@@ -20,11 +20,24 @@ Please see the [**Usage**](#usage) section below for guidance on how to use the 
 
 ### Breaking Changes:
 
-Note: `version 1.8` is built using Angular 12 in `partial-Ivy` mode. 
+### v2.0.0
+
+The following methods have been deprecated:
+
+- `connectAsPromise()`
+- `connectStreamAsPromise()`
+- `connectPlaybackAsPromise()`
+
+### v1.8
+
+Versions 1.8 and later are built using Angular `partial-Ivy` mode.
+
 This means that means projects using:
 - the `View Engine`
 - versions of Angular prior to v9
 need to ensure that `"enableIvy": false` is set in the `tsconfig.json` file.
+
+### v1.7
 
 As of `version 1.7` the following methods return an `Observable` rather than a `Promise`.
 
@@ -112,8 +125,7 @@ Once connected you can then interact with both the STREAM and HTTP APIs in the f
 
 ```
     // **** send data to STREAM API ****
-    this.sk.stream.send({..data..});    
-
+    this.sk.stream.send({..data..});
 ```
 
 - Use the `api` object to interact Signal K HTTP API path. `/signalk/v1/api/`
@@ -196,7 +208,7 @@ this.sk.stream.onMessage.subscribe( e=> {
 // **** CONNECT to Signal K Server ****
 this.sk.openStream('192.168.99.100', 80, false, 'self');
 ```
----
+
 
 # SignalKClient API
 
@@ -215,6 +227,7 @@ SignalKClient contains the following classes to interact with Signal K API's:
 - `version`
 - `authToken`
 - `uuid`
+- `signalkUuid`
 - `proxied`
 
 [Methods](#methods)
@@ -255,15 +268,18 @@ Information returned from Signal K server *hello* response.
     apiVersions: []
 } 
 ```
-*apiVersions* Constains list of api versions supported by the  Signal K server.
+*apiVersions:* Contains a list of api versions supported by the Signal K server.
 
 ---
 
 `version`: 
 
-Get / Set preferred Signal K API version to use when the server supports more than one version. *This must be used prior to connecting to the server.* If the Signal K server does not supports the specified version `v1` will be used. 
+Get / Set preferred Signal K API version to use when the server supports more than one version. 
 
-*Note: Signal K API is currently only available in `v1`.*
+*Note: This must be used prior to connecting to the server.* 
+
+If the Signal K server does not supports the specified version `v1` will be used. 
+
 
 *Example:*
 
@@ -296,9 +312,7 @@ Once you have supplied an `authToken` it will be used for all subsequent operati
 
 `uuid`:
 
-Provides a convenient way to generate a v4 UUID object which has two methods:
-
-- `toString()`: Returns a v4 UUID string
+Returns a v4 UUID string
 
 - `toSignalK()`: Returns a formatted Signal K resource identifier
 
@@ -306,14 +320,20 @@ Provides a convenient way to generate a v4 UUID object which has two methods:
 ```javascript
 let uuid= this.sk.uuid;
 
-uuid.toString();  
-
 // returns 27b88354-9fe0-4952-9ce6-c9d4eaea6d9e
+```
 
-uuid.toSignalK();
+---
+
+`signalkUuid`:
+
+Returns a formatted Signal K resource identifier
+
+*Example:*
+```javascript
+let uuid= this.sk.signalkUuid;
 
 // returns urn:mrn:signalk:uuid:27b88354-9fe0-4952-9ce6-c9d4eaea6d9e
-
 ```
 
 ---
@@ -340,7 +360,6 @@ hello response = {
         "signalk-ws":"ws://myServer.org:3000/signalk/v1/stream"
     }
 } 
-
 // endpoints used are those received in hello response.
 ```
 
@@ -358,7 +377,6 @@ hello response = {
         "signalk-ws":"ws://myServer.org:3000/signalk/v1/stream"
     }
 } 
-
 // received endpoint values are modified to include the proxy url values.
 endpoints: {
     "signalk-http":"https://myServer.org:3100/signalk/v1/api/",
@@ -391,7 +409,7 @@ Send *discovery* request to the Signal K server `/signalk` path.
 
 *Example:*
 
-```
+```javascript
 // **** make Discovery request ****
 this.sk.hello('myServer', 80, false).subscribe(
     response=> { ... },
@@ -421,40 +439,11 @@ This method performs the following:
 *Returns*: Observable
 
 *Example:*
-```
+```javascript
 this.sk.connect('myServer', 80, false).subscribe( 
     r=>{ ... },
     e=>{ ... } 
 );
-```
-
----
-`connectAsPromise(hostname, port, useSSL, subscribe):Promise`
-
-Same as `connect()` but returns a Promise.
-
-This method performs the following:
-
-1. Issues a `hello()` request
-2. Populates the `server` attibute with the received data
-
-*Parameters:*
-
-- *hostname*: host name or ip address
-
-- *port*:     port number
-
-- *useSSL*:   true: uses secure socket protocols *(https / wss)*
-
-- *subscribe*: Signal K subcription request value: 'all', 'self' or 'none'. *(Uses server default if null)*
-
-*Returns*: Promise
-
-*Example:*
-```
-this.sk.connect('myServer', 80, false)
-.then( r=>{ ... } )
-.catch ( e=>{ ... } )
 ```
 
 ---
@@ -464,7 +453,7 @@ this.sk.connect('myServer', 80, false)
 Disconnects from Signal K server and closes all connections.
 
 *Example:*
-```
+```javascript
 this.sk.disconnect();
 ```
 ---
@@ -492,7 +481,7 @@ This method performs the following:
 
 *Example:*
 
-```
+```javascript
 // **** Subscribe to Signal K Stream events ***
 
 this.sk.stream.onConnect.subscribe( e=> {
@@ -518,53 +507,6 @@ this.sk.connectStream('myServer', 80, false, 'self').subscribe(
 
 ---
 
-`connectStreamAsPromise(hostname, port, useSSL, subscribe):Promise`
-
-Same as `connectStream()` but returns a Promise.
-
-This method performs the following:
-
-1. Calls `connect()`
-2. Opens a connection to the discovered Stream endpoint.
-
-*Parameters:*
-
-- *hostname*: host name or ip address
-
-- *port*:     port number
-
-- *useSSL*:   true: uses secure socket protocols *(https / wss)*
-
-- *subscribe*: Signal K subcription request value: 'all', 'self' or 'none'. *(Uses server default if null)*
-
-*Returns*: Promise
-
-*Example:*
-
-```
-// **** Subscribe to Signal K Stream events ***
-
-this.sk.stream.onConnect.subscribe( e=> {
-    ...
-});
-this.sk.stream.onError.subscribe( e=> {
-    ...
-});
-this.sk.stream.onClose.subscribe( e=> {
-    ..
-});
-this.sk.stream.onMessage.subscribe( e=> {
-    ...
-});    
-
-// **** CONNECT to Delta Stream ****
-
-this.sk.connectStream('myServer', 80, false, 'self')
-.then( r=>{ ... } )
-.catch ( e=>{ ... } )
-```
----
-
 `connectPlayback(hostname, port, useSSL, options):Observable`
 
 Connect to Signal K server and and open a connection to the PLAYBACK STREAM API after performing service endpoint discovery.
@@ -583,7 +525,8 @@ This method performs the following:
 - *useSSL*:   true: uses secure socket protocols *(https / wss)*
 
 - *options*: Signal K Playback options
-```
+
+```javascript
 { 
     startTime: *Date / Time to start playback from.
     playbackRate: A number defining the rate at which data is sent.
@@ -595,7 +538,7 @@ This method performs the following:
 
 *Example:*
 
-```
+```javascript
 // **** Subscribe to Signal K Stream events ***
 
 this.sk.stream.onConnect.subscribe( e=> {
@@ -625,65 +568,6 @@ this.sk.connectPlayback('myServer', 80, false, {
 
 ---
 
-`connectPlaybackAsPromise(hostname, port, useSSL, options):Promise`
-
-Same as `connectPlayback()` but returns a Promise.
-
-This method performs the following:
-
-1. Calls `connectAsPromise()`
-2. Calls `openPlayback()`.
-
-*Parameters:*
-
-- *hostname*: host name or ip address
-
-- *port*:     port number
-
-- *useSSL*:   true: uses secure socket protocols *(https / wss)*
-
-- *options*: Signal K Playback options
-```
-{ 
-    startTime: *Date / Time to start playback from.
-    playbackRate: A number defining the rate at which data is sent.
-    subscribe: 'all', 'self' or 'none'. *(Uses server default if null)*
-}
-```
-
-*Returns*: Promise
-
-*Example:*
-
-```
-// **** Subscribe to Signal K Stream events ***
-
-this.sk.stream.onConnect.subscribe( e=> {
-    ...
-});
-this.sk.stream.onError.subscribe( e=> {
-    ...
-});
-this.sk.stream.onClose.subscribe( e=> {
-    ..
-});
-this.sk.stream.onMessage.subscribe( e=> {
-    ...
-});    
-
-// **** CONNECT to Playback Stream ****
-
-this.sk.connectPlayback('myServer', 80, false, {
-    subscribe: 'self',
-    playbackRate: 1,
-    startTime: '2019-01-19T07:14:58Z'
-})
-.then( r=>{ ... } )
-.catch ( e=>{ ... } );
-```
-
----
-
 `openStream(url, subscribe, token)`
 
 Connect direct to Signal K server DELTA stream using the supplied parameters without performing *endpoint discovery*.
@@ -700,7 +584,7 @@ This method is for use when there is no HTTP API available.
 
 *Returns*: true or Error().  Subscribe to `SignalKClient.stream` events to receive results of actions.
 
-```
+```javascript
 // **** Subscribe to Signal K Stream events ***
 
 this.sk.stream.onConnect.subscribe( e=> {
@@ -732,7 +616,8 @@ This method is for use when there is no HTTP API available.
 - *url*: url of Signal K playback endpoint.
 
 - *options*: Signal K Playback options
-```
+
+```javascript
 { 
     startTime: *Date / Time to start playback from.
     playbackRate: A number defining the rate at which data is sent.
@@ -744,7 +629,7 @@ This method is for use when there is no HTTP API available.
 
 *Returns*: true or Error().  Subscribe to `SignalKClient.stream` events to receive results of actions.
 
-```
+```javascript
 // **** Subscribe to Signal K Stream events ***
 
 this.sk.stream.onConnect.subscribe( e=> {
@@ -791,7 +676,7 @@ Make a HTTP request to a path relative to Signal K server root path. *`http(s):/
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -820,7 +705,7 @@ Make a HTTP PUT request to a path relative to Signal K server root path. *`http(
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -849,7 +734,7 @@ Make a HTTP POST request to a path relative to Signal K server root path. *`http
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -880,7 +765,7 @@ Request from the Signal K server the part of the full model at the requested tim
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -927,7 +812,7 @@ This token can then be applied to the `authToken` attribute so it is used in sub
 
 *Example:*
 
-```
+```javascript
 this.sk.hello( myserver, 80, false );
 
 // ** login
@@ -986,7 +871,7 @@ This value will be used if `appId` is not supplied to a called method.
 
 *Example:*
 
-```
+```javascript
 setAppId('myapp')
 ```
 
@@ -1004,7 +889,7 @@ This value will be used if `version` is not supplied to a called method.
 
 *Example:*
 
-```
+```javascript
 setAppVersion('1.1')
 ```
 
@@ -1024,7 +909,7 @@ Return a list of versions under which data is stored for the supplied context.
 
 *Example:*
 
-```
+```javascript
 appDataVersions('user', 'myapp')
 ```
 ---
@@ -1047,7 +932,7 @@ Return a list of keys stored under the path which data is stored for the supplie
 
 *Example:*
 
-```
+```javascript
 appDataKeys('vessel/speed', 'user', 'myapp', '1.0')
 ```
 ---
@@ -1070,7 +955,7 @@ Return the value stored at the supplied path for the supplied context, appId and
 
 *Example:*
 
-```
+```javascript
 appDataGet('vessel/speed', 'user', 'myapp', '1.0')
 ```
 ---
@@ -1094,7 +979,7 @@ Store a value at the supplied path for the supplied context, appId and version.
 
 *Example:*
 
-```
+```javascript
 appDataSet('vessel/speed/sog', 1.5, 'user', 'myapp', '1.0')
 ```
 ---
@@ -1116,7 +1001,7 @@ Add / Update / Remove multiple values at the supplied path for the supplied cont
 
 *Example:*
 
-```
+```javascript
 appDataPatch(
     [
         {"op":"add", "path": "/vessel/speed", "value": {sog: 1.25} },

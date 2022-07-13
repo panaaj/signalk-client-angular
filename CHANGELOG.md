@@ -1,8 +1,26 @@
 # CHANGELOG: signalk-client-angular
 
+### v2.0.0
+
+- Added `proxied` attribute. When set to true ignores the endpoint protocol, host & port returned in the hello message and uses the values passed to the connection. Useful when Signal K server accessed via a proxy.
+
+- Added `api.observeResponse` attribute which when set to `true` results in the entire HTTP response being available for `api.post()`, `api.put()` and `api.delete()` rather than just the `response.body`. (Default is `false`).
+
+
+__Breaking Changes__:
+
+- Changed `uuid()` function to return a string containing the UUID value and not a UUID object. 
+
+- Added `signalkUuid()` function to return a Signal K UUID string.
+
+- Removed patch for working around the issue when using PUT to update resources. __Note: This library now requires a version of Signal K server that implements the `Resources API`__.
+
+- Removed support for legacy Signal K server path `/webapps`.
+
+
 ### v1.8.0
 
-- Updated to Angular 12.
+- Updated to support Angular Ivy.
 
 - Added API `raiseAlarm()` and `clearAlarm()` methods.
 

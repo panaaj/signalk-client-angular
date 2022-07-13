@@ -16,6 +16,9 @@ The `api` object provides methods to facilitate interaction with the Signal K HT
 
 ---
 
+[Attributes](#attributes)
+- `observeResponse`
+
 [Methods](#methods)
 - `get()`
 - `put()`
@@ -26,6 +29,14 @@ The `api` object provides methods to facilitate interaction with the Signal K HT
 - `getSelfId()`
 - `raiseAlarm()`
 - `clearAlarm()`
+
+---
+
+### Attributes
+
+`observeResponse: boolean`
+
+Set this to `true` for the entire HTTP response being available, rather than just the `response.body`, when using `api.post()`, `api.put()` and `api.delete()` methods. (Default is `false`).
 
 ---
 
@@ -43,7 +54,7 @@ Make a request to a path relative to the Signal K server HTTP API path. *i.e. `/
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -90,7 +101,7 @@ Note: context is set to `vessels.self` if path does not start with `vessels`.
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -122,7 +133,7 @@ Send a HTTP POST request to a path relative to the Signal K server HTTP API path
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -164,7 +175,7 @@ Send a HTTP DELETE request to a path relative to the Signal K server HTTP API pa
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -192,7 +203,7 @@ Returns the metadata for the specified context and path in the Signal K tree.
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -235,7 +246,7 @@ Returns the `uuid` of the self identity.
 
 *Example:*
 
-```
+```javascript
 // ** connect to server **
 this.sk.connect(...);
 
@@ -253,7 +264,7 @@ this.sk.getSelfId().subscribe(
 
 `raiseAlarm(context, name, alarm)`
 
-Send stream update to raise an alarm of the supplied name.
+Raise an alarm of the supplied name.
 
 *Parameters:*
 
@@ -264,8 +275,9 @@ Send stream update to raise an alarm of the supplied name.
 - *alarm*: An `Alarm` object _(see Alarm below)_
 
 *Examples:*
-```
-this.sk.stream.raiseAlarm('self','Anchor', new Alarm(
+
+```javascript
+this.sk.api.raiseAlarm('self','Anchor', new Alarm(
     'Anchor dragging!',
     AlarmState.alarm,
     true, true )
@@ -273,7 +285,7 @@ this.sk.stream.raiseAlarm('self','Anchor', new Alarm(
 
 // ** using special alarm type **
 
-this.sk.stream.raiseAlarm('self',AlarmType.sinking, new Alarm(
+this.sk.api.raiseAlarm('self',AlarmType.sinking, new Alarm(
     'SINKING',
     AlarmState.alarm,
     true, true )
@@ -283,7 +295,7 @@ this.sk.stream.raiseAlarm('self',AlarmType.sinking, new Alarm(
 
 `clearAlarm(context, name)`
 
-Send stream update to clear the alarm of the supplied name.
+Clear the alarm of the supplied name.
 
 *Parameters:*
 
@@ -292,8 +304,8 @@ Send stream update to clear the alarm of the supplied name.
 - *name*: Alarm name e.g.MOB, Anchor. 
 
 *Examples:*
-```
-this.sk.stream.clearAlarm('self','MOB');   
+```javascript
+this.sk.api.clearAlarm('self','MOB');   
 ```
 ---
 
@@ -323,7 +335,7 @@ Attribute that returns a formatted value for use with `raiseAlarm()` method.
         true, true
     ) 
 
-    this.sk.stream.raiseAlarm('self', 'Anchor', al);
+    this.sk.api.raiseAlarm('self', 'Anchor', al);
 ```
 
 ---
