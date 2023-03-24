@@ -11,7 +11,7 @@ __Breaking Changes__:
 
 - Changed `uuid()` function to return a string containing the UUID value and not a UUID object. 
 
-- Added `signalkUuid()` function to return a Signal K UUID string.
+- Added `signalkUuid()` function to return a Signal K v1 UUID string.
 
 - Removed patch for working around the issue when using PUT to update resources. __Note: This library now requires a version of Signal K server that implements the `Resources API`__.
 
